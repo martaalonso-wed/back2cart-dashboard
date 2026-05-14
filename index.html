@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Back 2 Cart — ES vs FR (Variante) · 13-14 may 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+<style>
+:root { color-scheme: light; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #fff; color: #1a1a1a; padding: 24px; max-width: 900px; margin: 0 auto; line-height: 1.6; }
+h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+h2 { font-size: 18px; font-weight: 500; margin-bottom: 12px; margin-top: 28px; }
+.subtitle { font-size: 14px; color: #666; margin-bottom: 20px; }
+.metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 24px; }
+.metric-card { background: #f5f5f3; border-radius: 8px; padding: 14px; }
+.metric-label { font-size: 12px; color: #666; margin-bottom: 2px; }
+.metric-value { font-size: 22px; font-weight: 500; }
+.pos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+.pos-card { border: 1px solid #e5e5e3; border-radius: 12px; padding: 16px 20px; }
+.pos-title { font-size: 18px; font-weight: 500; margin-bottom: 2px; }
+.pos-sub { font-size: 13px; color: #666; margin-bottom: 12px; }
+.stat-row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; }
+.stat-label { color: #666; }
+.stat-value { font-weight: 500; }
+.highlight { color: #0f6e56; font-size: 18px; }
+.divider { border-top: 1px solid #e5e5e3; margin: 10px 0; }
+.chart-wrap { position: relative; width: 100%; margin-bottom: 8px; }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12px; color: #666; margin-bottom: 24px; }
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+.note { background: #eff6ff; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #1e40af; line-height: 1.7; margin-bottom: 12px; }
+.note b { font-weight: 500; }
+.warn { background: #fffbeb; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #92400e; line-height: 1.7; margin-bottom: 12px; }
+.warn b { font-weight: 500; }
+.badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 500; }
+.badge-ok { background: #e1f5ee; color: #085041; }
+.badge-warn { background: #fef3c7; color: #92400e; }
+.footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e5e5e3; font-size: 12px; color: #999; }
+@media (max-width: 600px) { .pos-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<h1>Back 2 Cart — Segmento variante</h1>
+<p class="subtitle">13 mayo – 14 mayo 2026 — Solo usuarios en variante (ID: ...a8dg1g) — Filtrado a nivel de evento via GA4 Data API</p>
+
+<div class="metrics-grid">
+  <div class="metric-card"><div class="metric-label">Usuarios display (total)</div><div class="metric-value">217</div></div>
+  <div class="metric-card"><div class="metric-label">Clic CTA (total)</div><div class="metric-value">42</div></div>
+  <div class="metric-card"><div class="metric-label">Clic cerrar (total)</div><div class="metric-value">11</div></div>
+  <div class="metric-card"><div class="metric-label">CTR CTA global</div><div class="metric-value">19.4%</div></div>
+</div>
+
+<div class="pos-grid">
+  <div class="pos-card">
+    <div class="pos-title">FR <span class="badge badge-ok">buen CTR</span></div>
+    <div class="pos-sub">weekendesk.fr — 41,398 usuarios totales</div>
+    <div class="stat-row"><span class="stat-label">display_back_to_cart</span><span class="stat-value">437 ev / 182 usr</span></div>
+    <div class="stat-row"><span class="stat-label">backtocart_cta</span><span class="stat-value">66 ev / 39 usr</span></div>
+    <div class="stat-row"><span class="stat-label">backtocart_close</span><span class="stat-value">14 ev / 10 usr</span></div>
+    <div class="divider"></div>
+    <div class="stat-row"><span class="stat-label">CTR del CTA</span><span class="stat-value highlight">21.4%</span></div>
+    <div class="stat-row"><span class="stat-label">Tasa de cierre</span><span class="stat-value">5.5%</span></div>
+  </div>
+  <div class="pos-card">
+    <div class="pos-title">ES <span class="badge badge-warn">CTR bajo</span></div>
+    <div class="pos-sub">weekendesk.es — 17,664 usuarios totales</div>
+    <div class="stat-row"><span class="stat-label">display_back_to_cart</span><span class="stat-value">68 ev / 35 usr</span></div>
+    <div class="stat-row"><span class="stat-label">backtocart_cta</span><span class="stat-value">12 ev / 3 usr</span></div>
+    <div class="stat-row"><span class="stat-label">backtocart_close</span><span class="stat-value">1 ev / 1 usr</span></div>
+    <div class="divider"></div>
+    <div class="stat-row"><span class="stat-label">CTR del CTA</span><span class="stat-value highlight">8.6%</span></div>
+    <div class="stat-row"><span class="stat-label">Tasa de cierre</span><span class="stat-value">2.9%</span></div>
+  </div>
+</div>
+
+<h2>Funnel variante — usuarios</h2>
+<div class="chart-wrap" style="height:240px;"><canvas id="funnelChart"></canvas></div>
+<div class="legend">
+  <span class="legend-item"><span class="legend-dot" style="background:#7F77DD;"></span>FR variante</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#D85A30;"></span>ES variante</span>
+</div>
+
+<h2>Tasas de conversion — variante</h2>
+<div class="chart-wrap" style="height:220px;"><canvas id="rateChart"></canvas></div>
+<div class="legend">
+  <span class="legend-item"><span class="legend-dot" style="background:#1D9E75;"></span>CTR del CTA</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#E24B4A;"></span>Tasa de cierre</span>
+</div>
+
+<div class="note"><b>Segmentacion evento-level:</b> Estos datos filtran por hits donde <code>active_ab_test_variations</code> contiene el ID de la variante. Las exploraciones de GA4 usan segmentos a nivel de usuario, por lo que pueden mostrar cifras ligeramente mayores.</div>
+<div class="warn"><b>Volumenes:</b> FR tiene 182 usuarios expuestos y ES 35. Con 2 dias de datos los volumenes son bajos — se recomienda acumular al menos 2 semanas para significancia estadistica.</div>
+
+<div class="footer">Generado el 14 mayo 2026 via GA4 Data API — Propiedades: weekendesk.fr (280303690), weekendesk.es (302266263)</div>
+
+<script>
+const dlPlugin = {
+  id: 'dlPlugin',
+  afterDatasetsDraw(chart) {
+    const ctx = chart.ctx;
+    chart.data.datasets.forEach((ds, di) => {
+      chart.getDatasetMeta(di).data.forEach((el, i) => {
+        const val = ds.data[i];
+        if (!val) return;
+        ctx.save();
+        ctx.font = '500 12px -apple-system, system-ui, sans-serif';
+        ctx.fillStyle = '#1a1a1a';
+        if (chart.options.indexAxis === 'y') {
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(String(val), el.x + 6, el.y);
+        } else {
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText(ds.suffix ? val + ds.suffix : String(val), el.x, el.y - 6);
+        }
+        ctx.restore();
+      });
+    });
+  }
+};
+Chart.register(dlPlugin);
+
+new Chart(document.getElementById('funnelChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Vieron modulo', 'Clic CTA', 'Clic cerrar'],
+    datasets: [
+      { label: 'FR', data: [182, 39, 10], backgroundColor: '#7F77DD', borderRadius: 4, barPercentage: 0.45 },
+      { label: 'ES', data: [35, 3, 1], backgroundColor: '#D85A30', borderRadius: 4, barPercentage: 0.45 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+    plugins: { legend: { display: false }, tooltip: { enabled: true } },
+    scales: {
+      x: { ticks: { color: '#999' }, grid: { color: 'rgba(0,0,0,0.04)' }, beginAtZero: true },
+      y: { ticks: { color: '#666' }, grid: { display: false } }
+    }
+  }
+});
+
+new Chart(document.getElementById('rateChart'), {
+  type: 'bar',
+  data: {
+    labels: ['FR', 'ES'],
+    datasets: [
+      { label: 'CTR CTA', data: [21.4, 8.6], backgroundColor: '#1D9E75', borderRadius: 4, barPercentage: 0.35, suffix: '%' },
+      { label: 'Tasa cierre', data: [5.5, 2.9], backgroundColor: '#E24B4A', borderRadius: 4, barPercentage: 0.35, suffix: '%' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y + '%'; } } } },
+    scales: {
+      x: { ticks: { color: '#666' }, grid: { display: false } },
+      y: { ticks: { color: '#999', callback: function(v) { return v + '%'; } }, grid: { color: 'rgba(0,0,0,0.04)' }, beginAtZero: true, max: 30 }
+    }
+  }
+});
+</script>
+</body>
+</html>
