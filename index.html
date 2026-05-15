@@ -7,48 +7,50 @@
 <title>Back 2 Cart — Dashboard 5 POS (Variante)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
 <style>
-:root { color-scheme: light; }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #fff; color: #1a1a1a; padding: 24px; max-width: 960px; margin: 0 auto; line-height: 1.6; }
-h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
-h2 { font-size: 18px; font-weight: 500; margin-bottom: 12px; margin-top: 28px; }
-.subtitle { font-size: 14px; color: #666; margin-bottom: 20px; }
-.updated { font-size: 12px; color: #999; margin-bottom: 20px; }
-.metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 24px; }
-.metric-card { background: #f5f5f3; border-radius: 8px; padding: 14px; }
-.metric-label { font-size: 12px; color: #666; margin-bottom: 2px; }
-.metric-value { font-size: 22px; font-weight: 500; }
-.pos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 14px; margin-bottom: 28px; }
-.pos-card { border: 1px solid #e5e5e3; border-radius: 12px; padding: 14px 16px; }
-.pos-card.problem { border-color: #fca5a5; }
-.pos-title { font-size: 16px; font-weight: 500; margin-bottom: 2px; }
-.pos-sub { font-size: 12px; color: #666; margin-bottom: 10px; }
-.stat-row { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; }
-.stat-label { color: #666; }
-.stat-value { font-weight: 500; }
-.highlight { color: #0f6e56; font-size: 16px; }
-.highlight-red { color: #991b1b; font-size: 16px; }
-.divider { border-top: 1px solid #e5e5e3; margin: 8px 0; }
-.chart-wrap { position: relative; width: 100%; margin-bottom: 8px; }
-.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #666; margin-bottom: 24px; }
-.legend-item { display: flex; align-items: center; gap: 5px; }
-.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
-.badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 6px; font-weight: 500; }
-.badge-ok { background: #e1f5ee; color: #085041; }
-.badge-warn { background: #fef3c7; color: #92400e; }
-.badge-new { background: #eff6ff; color: #1e40af; }
-.badge-err { background: #fef2f2; color: #991b1b; }
-.conclusions { background: #f8f7f5; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; }
-.conclusions h2 { margin-top: 0; }
-.conclusion-item { padding: 8px 0; border-bottom: 1px solid #e5e5e3; font-size: 14px; line-height: 1.6; }
-.conclusion-item:last-child { border-bottom: none; }
-.conclusion-item strong { font-weight: 500; }
-.note { background: #eff6ff; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #1e40af; line-height: 1.7; margin-bottom: 12px; }
-.note b { font-weight: 500; }
-.warn { background: #fffbeb; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #92400e; line-height: 1.7; margin-bottom: 12px; }
-.warn b { font-weight: 500; }
-.footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e5e5e3; font-size: 12px; color: #999; }
-@media (max-width: 600px) { .pos-grid { grid-template-columns: 1fr 1fr; } }
+:root{color-scheme:light}*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#fff;color:#1a1a1a;padding:24px;max-width:960px;margin:0 auto;line-height:1.6}
+h1{font-size:22px;font-weight:500;margin-bottom:4px}
+h2{font-size:18px;font-weight:500;margin-bottom:12px;margin-top:28px}
+.subtitle{font-size:14px;color:#666;margin-bottom:8px}
+.updated{font-size:12px;color:#999;margin-bottom:16px}
+.filters{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px;padding:12px 16px;background:#f8f7f5;border-radius:10px}
+.filters label{font-size:13px;color:#666;font-weight:500}
+.filters select{font-size:13px;padding:6px 10px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:24px}
+.metric-card{background:#f5f5f3;border-radius:8px;padding:14px}
+.metric-label{font-size:12px;color:#666;margin-bottom:2px}
+.metric-value{font-size:22px;font-weight:500}
+.pos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:14px;margin-bottom:28px}
+.pos-card{border:1px solid #e5e5e3;border-radius:12px;padding:14px 16px}
+.pos-card.problem{border-color:#fca5a5}
+.pos-card.hidden{display:none}
+.pos-title{font-size:16px;font-weight:500;margin-bottom:2px}
+.pos-sub{font-size:12px;color:#666;margin-bottom:10px}
+.stat-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}
+.stat-label{color:#666}.stat-value{font-weight:500}
+.highlight{color:#0f6e56;font-size:16px}
+.highlight-red{color:#991b1b;font-size:16px}
+.divider{border-top:1px solid #e5e5e3;margin:8px 0}
+.chart-wrap{position:relative;width:100%;margin-bottom:8px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#666;margin-bottom:24px}
+.legend-item{display:flex;align-items:center;gap:5px}
+.legend-dot{width:10px;height:10px;border-radius:2px}
+.badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:6px;font-weight:500}
+.badge-ok{background:#e1f5ee;color:#085041}
+.badge-warn{background:#fef3c7;color:#92400e}
+.badge-new{background:#eff6ff;color:#1e40af}
+.badge-err{background:#fef2f2;color:#991b1b}
+.conclusions{background:#f8f7f5;border-radius:12px;padding:20px 24px;margin-bottom:24px}
+.conclusions h2{margin-top:0}
+.conclusion-item{padding:8px 0;border-bottom:1px solid #e5e5e3;font-size:14px;line-height:1.6}
+.conclusion-item:last-child{border-bottom:none}
+.conclusion-item strong{font-weight:500}
+.note{background:#eff6ff;border-radius:8px;padding:14px 16px;font-size:13px;color:#1e40af;line-height:1.7;margin-bottom:12px}
+.note b{font-weight:500}
+.warn{background:#fffbeb;border-radius:8px;padding:14px 16px;font-size:13px;color:#92400e;line-height:1.7;margin-bottom:12px}
+.warn b{font-weight:500}
+.footer{margin-top:32px;padding-top:16px;border-top:1px solid #e5e5e3;font-size:12px;color:#999}
+@media(max-width:600px){.pos-grid{grid-template-columns:1fr 1fr}.filters{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
@@ -57,122 +59,91 @@ h2 { font-size: 18px; font-weight: 500; margin-bottom: 12px; margin-top: 28px; }
 <p class="subtitle">Solo usuarios en variante (ID: ...a8dg1g) — Filtrado a nivel de evento via GA4 Data API</p>
 <p class="updated">Datos: 13–15 mayo 2026 · Ultima actualizacion: 15 mayo 2026</p>
 
-<div class="metrics-grid">
-  <div class="metric-card"><div class="metric-label">Usuarios display (5 POS)</div><div class="metric-value">353</div></div>
-  <div class="metric-card"><div class="metric-label">Clic CTA (5 POS)</div><div class="metric-value">69</div></div>
-  <div class="metric-card"><div class="metric-label">Clic cerrar (5 POS)</div><div class="metric-value">18</div></div>
-  <div class="metric-card"><div class="metric-label">CTR CTA global</div><div class="metric-value">19.5%</div></div>
+<div class="filters">
+  <label>POS:</label>
+  <select id="filterPOS" onchange="applyFilters()">
+    <option value="all">Todos</option>
+    <option value="FR">FR</option>
+    <option value="ES">ES</option>
+    <option value="BE">BE</option>
+    <option value="NL">NL</option>
+    <option value="IT">IT</option>
+  </select>
+  <label>Device:</label>
+  <select id="filterDevice" onchange="applyFilters()">
+    <option value="all">Todos</option>
+    <option value="mobile">Mobile</option>
+    <option value="desktop">Desktop</option>
+    <option value="tablet">Tablet</option>
+  </select>
 </div>
 
-<div class="pos-grid">
-  <div class="pos-card">
-    <div class="pos-title">FR <span class="badge badge-ok">20.1%</span></div>
-    <div class="pos-sub">weekendesk.fr</div>
-    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">760 ev / 314 usr</span></div>
-    <div class="stat-row"><span class="stat-label">CTA clic</span><span class="stat-value">109 ev / 63 usr</span></div>
-    <div class="stat-row"><span class="stat-label">Cerrar</span><span class="stat-value">23 ev / 18 usr</span></div>
-    <div class="divider"></div>
-    <div class="stat-row"><span class="stat-label">CTR CTA</span><span class="stat-value highlight">20.1%</span></div>
-    <div class="stat-row"><span class="stat-label">Tasa cierre</span><span class="stat-value">5.7%</span></div>
-  </div>
-  <div class="pos-card">
-    <div class="pos-title">ES <span class="badge badge-warn">15.8%</span></div>
-    <div class="pos-sub">weekendesk.es</div>
-    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">30 ev / 19 usr</span></div>
-    <div class="stat-row"><span class="stat-label">CTA clic</span><span class="stat-value">7 ev / 3 usr</span></div>
-    <div class="stat-row"><span class="stat-label">Cerrar</span><span class="stat-value">0 ev / 0 usr</span></div>
-    <div class="divider"></div>
-    <div class="stat-row"><span class="stat-label">CTR CTA</span><span class="stat-value highlight">15.8%</span></div>
-    <div class="stat-row"><span class="stat-label">Tasa cierre</span><span class="stat-value">0%</span></div>
-  </div>
-  <div class="pos-card">
-    <div class="pos-title">BE <span class="badge badge-new">12.5%</span></div>
-    <div class="pos-sub">weekendesk.be</div>
-    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">28 ev / 16 usr</span></div>
-    <div class="stat-row"><span class="stat-label">CTA clic</span><span class="stat-value">2 ev / 2 usr</span></div>
-    <div class="stat-row"><span class="stat-label">Cerrar</span><span class="stat-value">0 ev / 0 usr</span></div>
-    <div class="divider"></div>
-    <div class="stat-row"><span class="stat-label">CTR CTA</span><span class="stat-value highlight">12.5%</span></div>
-    <div class="stat-row"><span class="stat-label">Tasa cierre</span><span class="stat-value">0%</span></div>
-  </div>
-  <div class="pos-card">
-    <div class="pos-title">NL <span class="badge badge-new">50%</span></div>
-    <div class="pos-sub">weekendesk.nl</div>
-    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">2 ev / 2 usr</span></div>
-    <div class="stat-row"><span class="stat-label">CTA clic</span><span class="stat-value">1 ev / 1 usr</span></div>
-    <div class="stat-row"><span class="stat-label">Cerrar</span><span class="stat-value">0 ev / 0 usr</span></div>
-    <div class="divider"></div>
-    <div class="stat-row"><span class="stat-label">CTR CTA</span><span class="stat-value highlight">50%</span></div>
-    <div class="stat-row"><span class="stat-label">Tasa cierre</span><span class="stat-value">0%</span></div>
-    <div style="font-size:11px;color:#888;padding-top:4px;">Volumen muy bajo (2 usr) — no significativo</div>
-  </div>
-  <div class="pos-card problem">
-    <div class="pos-title">IT <span class="badge badge-err">0% clics</span></div>
-    <div class="pos-sub">weekendesk.it</div>
-    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">3 ev / 2 usr</span></div>
-    <div class="stat-row"><span class="stat-label">CTA clic</span><span class="stat-value">0 ev / 0 usr</span></div>
-    <div class="stat-row"><span class="stat-label">Cerrar</span><span class="stat-value">0 ev / 0 usr</span></div>
-    <div class="divider"></div>
-    <div class="stat-row"><span class="stat-label">CTR CTA</span><span class="stat-value highlight-red">0%</span></div>
-    <div class="stat-row"><span class="stat-label">Tasa cierre</span><span class="stat-value">0%</span></div>
-    <div style="font-size:11px;color:#991b1b;padding-top:4px;">Tracking de clics roto — revisar implementacion</div>
-  </div>
-</div>
+<div class="metrics-grid" id="topMetrics"></div>
+<div class="pos-grid" id="posCards"></div>
 
-<h2>Funnel variante — usuarios por POS</h2>
-<div class="chart-wrap" style="height:280px;"><canvas id="funnelChart"></canvas></div>
+<h2>Funnel variante — usuarios</h2>
+<div class="chart-wrap" style="height:280px"><canvas id="funnelChart"></canvas></div>
+<div id="funnelLegend" class="legend"></div>
+
+<h2>CTR del CTA por POS</h2>
+<div class="chart-wrap" style="height:220px"><canvas id="ctrChart"></canvas></div>
 <div class="legend">
-  <span class="legend-item"><span class="legend-dot" style="background:#7F77DD;"></span>FR</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#D85A30;"></span>ES</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#1D9E75;"></span>BE</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#378ADD;"></span>NL</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#E24B4A;"></span>IT</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>CTR del CTA (%)</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#E24B4A"></span>Tasa de cierre (%)</span>
 </div>
 
-<h2>CTR del CTA por POS — variante</h2>
-<div class="chart-wrap" style="height:220px;"><canvas id="ctrChart"></canvas></div>
-<div class="legend">
-  <span class="legend-item"><span class="legend-dot" style="background:#1D9E75;"></span>CTR del CTA (%)</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#E24B4A;"></span>Tasa de cierre (%)</span>
-</div>
+<div class="conclusions" id="conclusions"></div>
 
-<div class="conclusions">
-  <h2>Conclusiones clave</h2>
-  <div class="conclusion-item"><strong>1. La feature mantiene un CTR global del 19.5%.</strong> Con 3 dias de datos acumulados y 353 usuarios expuestos en la variante, casi 1 de cada 5 usuarios que ven el modulo Back 2 Cart vuelve al checkout. La hipotesis se valida: el recordatorio de carrito abandonado genera accion.</div>
-  <div class="conclusion-item"><strong>2. FR lidera con un CTR estable del 20.1%.</strong> Con 314 usuarios expuestos, FR es el POS con mas volumen y mejor rendimiento. El CTR se mantiene consistente respecto al dia anterior (21.4% → 20.1%), lo que da confianza en la tendencia.</div>
-  <div class="conclusion-item"><strong>3. ES mejora al 15.8% (antes 8.6%).</strong> La dimension cambio de <code>active_ab_test_variations</code> a <code>ab_test_variations</code>, por lo que los datos de ES solo reflejan el periodo desde el cambio. Aun asi, el CTR ha subido. Volumen todavia bajo (19 usuarios).</div>
-  <div class="conclusion-item"><strong>4. BE y NL ya reportan datos segmentados.</strong> BE arranca con un 12.5% de CTR (16 usuarios) — prometedor. NL muestra 50% pero con solo 2 usuarios, lo que no es significativo. Ambos necesitan mas volumen para ser evaluables.</div>
-  <div class="conclusion-item"><strong>5. IT sigue con 0 clics — problema confirmado.</strong> A pesar de tener 2 usuarios que ven el modulo y de haber registrado la dimension correctamente, sigue habiendo 0 eventos de <code>custom_click</code> con target <code>backtocart_cta</code> o <code>backtocart_close</code>. El tracking de clics en IT esta roto o el componente no renderiza los botones. Requiere ticket de bug.</div>
-  <div class="conclusion-item"><strong>6. La tasa de cierre es baja en todos los POS.</strong> Solo FR registra cierres (5.7%). En ES, BE, NL e IT es 0%. Esto indica que el modulo no molesta a los usuarios — buena senal para la experiencia de usuario.</div>
-  <div class="conclusion-item"><strong>7. Aun no hay volumen suficiente para significancia.</strong> FR se acerca a un tamano muestral evaluable (314 usuarios). ES (19), BE (16), NL (2) e IT (2) necesitan al menos 1-2 semanas mas. Se recomienda no tomar decisiones hasta alcanzar ~500 usuarios por POS.</div>
-</div>
-
-<div class="note"><b>Cambio de dimension en ES:</b> La propiedad de ES cambio de <code>active_ab_test_variations</code> a <code>ab_test_variations</code>. Los datos historicos bajo la dimension antigua no son accesibles con el nuevo nombre. FR sigue usando <code>active_ab_test_variations</code>.</div>
+<div class="note"><b>Segmentacion evento-level:</b> Estos datos filtran por hits donde <code>ab_test_variations</code> o <code>active_ab_test_variations</code> contiene el ID de la variante. FR usa <code>active_ab_test_variations</code>; ES, BE, NL, IT usan <code>ab_test_variations</code>.</div>
 <div class="warn"><b>Proxima actualizacion automatica:</b> Lunes 18 mayo a las 9:15h. El dashboard se actualiza de lunes a viernes.</div>
-
 <div class="footer">Generado el 15 mayo 2026 via GA4 Data API — FR (280303690), ES (302266263), BE (302251346), NL (302274658), IT (302218985)</div>
 
 <script>
-const dlPlugin = {
-  id: 'dlPlugin',
-  afterDatasetsDraw(chart) {
-    const ctx = chart.ctx;
-    chart.data.datasets.forEach((ds, di) => {
-      chart.getDatasetMeta(di).data.forEach((el, i) => {
-        const val = ds.data[i];
-        if (!val) return;
-        ctx.save();
-        ctx.font = '500 11px -apple-system, system-ui, sans-serif';
-        ctx.fillStyle = '#1a1a1a';
-        if (chart.options.indexAxis === 'y') {
-          ctx.textAlign = 'left';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(String(val), el.x + 5, el.y);
-        } else {
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'bottom';
-          ctx.fillText(ds.suffix ? val + ds.suffix : String(val), el.x, el.y - 5);
-        }
+var DATA = {
+  FR: {
+    name: 'weekendesk.fr', color: '#7F77DD',
+    display: { mobile:{ev:474,usr:207}, desktop:{ev:275,usr:101}, tablet:{ev:18,usr:9} },
+    cta:     { mobile:{ev:97,usr:53},  desktop:{ev:10,usr:9},   tablet:{ev:2,usr:1} },
+    close:   { mobile:{ev:0,usr:0},    desktop:{ev:18,usr:15},  tablet:{ev:5,usr:3} }
+  },
+  ES: {
+    name: 'weekendesk.es', color: '#D85A30',
+    display: { mobile:{ev:24,usr:13}, desktop:{ev:8,usr:7}, tablet:{ev:0,usr:0} },
+    cta:     { mobile:{ev:7,usr:3},   desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} },
+    close:   { mobile:{ev:0,usr:0},   desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} }
+  },
+  BE: {
+    name: 'weekendesk.be', color: '#1D9E75',
+    display: { mobile:{ev:25,usr:13}, desktop:{ev:3,usr:3}, tablet:{ev:0,usr:0} },
+    cta:     { mobile:{ev:2,usr:2},   desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} },
+    close:   { mobile:{ev:0,usr:0},   desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} }
+  },
+  NL: {
+    name: 'weekendesk.nl', color: '#378ADD',
+    display: { mobile:{ev:2,usr:2},  desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} },
+    cta:     { mobile:{ev:1,usr:1},  desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} },
+    close:   { mobile:{ev:0,usr:0},  desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} }
+  },
+  IT: {
+    name: 'weekendesk.it', color: '#E24B4A',
+    display: { mobile:{ev:3,usr:2},  desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} },
+    cta:     { mobile:{ev:0,usr:0},  desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} },
+    close:   { mobile:{ev:0,usr:0},  desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} }
+  }
+};
+var DEVICES = ['mobile','desktop','tablet'];
+var funnelChart, ctrChart;
+
+var dlPlugin = {
+  id:'dlPlugin',
+  afterDatasetsDraw: function(chart) {
+    var ctx = chart.ctx;
+    chart.data.datasets.forEach(function(ds,di) {
+      chart.getDatasetMeta(di).data.forEach(function(el,i) {
+        var val = ds.data[i]; if (!val) return;
+        ctx.save(); ctx.font='500 11px -apple-system,system-ui,sans-serif'; ctx.fillStyle='#1a1a1a';
+        if (chart.options.indexAxis==='y') { ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(String(val),el.x+5,el.y); }
+        else { ctx.textAlign='center'; ctx.textBaseline='bottom'; ctx.fillText(ds.suffix?val+ds.suffix:String(val),el.x,el.y-5); }
         ctx.restore();
       });
     });
@@ -180,46 +151,133 @@ const dlPlugin = {
 };
 Chart.register(dlPlugin);
 
-new Chart(document.getElementById('funnelChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Vieron modulo', 'Clic CTA', 'Clic cerrar'],
-    datasets: [
-      { label: 'FR', data: [314, 63, 18], backgroundColor: '#7F77DD', borderRadius: 4, barPercentage: 0.35 },
-      { label: 'ES', data: [19, 3, 0], backgroundColor: '#D85A30', borderRadius: 4, barPercentage: 0.35 },
-      { label: 'BE', data: [16, 2, 0], backgroundColor: '#1D9E75', borderRadius: 4, barPercentage: 0.35 },
-      { label: 'NL', data: [2, 1, 0], backgroundColor: '#378ADD', borderRadius: 4, barPercentage: 0.35 },
-      { label: 'IT', data: [2, 0, 0], backgroundColor: '#E24B4A', borderRadius: 4, barPercentage: 0.35 }
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
-    plugins: { legend: { display: false }, tooltip: { enabled: true } },
-    scales: {
-      x: { ticks: { color: '#999' }, grid: { color: 'rgba(0,0,0,0.04)' }, beginAtZero: true },
-      y: { ticks: { color: '#666' }, grid: { display: false } }
-    }
+function agg(posData, device) {
+  if (device === 'all') {
+    var t = {ev:0,usr:0};
+    DEVICES.forEach(function(d){ t.ev+=posData[d].ev; t.usr+=posData[d].usr; });
+    return t;
   }
-});
+  return posData[device] || {ev:0,usr:0};
+}
 
-new Chart(document.getElementById('ctrChart'), {
-  type: 'bar',
-  data: {
-    labels: ['FR', 'ES', 'BE', 'NL', 'IT'],
-    datasets: [
-      { label: 'CTR CTA', data: [20.1, 15.8, 12.5, 50, 0], backgroundColor: '#1D9E75', borderRadius: 4, barPercentage: 0.35, suffix: '%' },
-      { label: 'Tasa cierre', data: [5.7, 0, 0, 0, 0], backgroundColor: '#E24B4A', borderRadius: 4, barPercentage: 0.35, suffix: '%' }
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y + '%'; } } } },
-    scales: {
-      x: { ticks: { color: '#666' }, grid: { display: false } },
-      y: { ticks: { color: '#999', callback: function(v) { return v + '%'; } }, grid: { color: 'rgba(0,0,0,0.04)' }, beginAtZero: true }
+function getFiltered() {
+  var pos = document.getElementById('filterPOS').value;
+  var dev = document.getElementById('filterDevice').value;
+  var keys = pos === 'all' ? Object.keys(DATA) : [pos];
+  var result = {};
+  keys.forEach(function(k) {
+    result[k] = {
+      name: DATA[k].name, color: DATA[k].color,
+      display: agg(DATA[k].display, dev),
+      cta: agg(DATA[k].cta, dev),
+      close: agg(DATA[k].close, dev)
+    };
+  });
+  return result;
+}
+
+function pct(a,b) { return b>0 ? Math.round(a/b*1000)/10 : 0; }
+
+function applyFilters() {
+  var filtered = getFiltered();
+  var keys = Object.keys(filtered);
+  var totDisp=0, totCta=0, totClose=0;
+  keys.forEach(function(k){ totDisp+=filtered[k].display.usr; totCta+=filtered[k].cta.usr; totClose+=filtered[k].close.usr; });
+  var globalCtr = pct(totCta, totDisp);
+
+  document.getElementById('topMetrics').innerHTML =
+    mc('Usuarios display',totDisp)+mc('Clic CTA',totCta)+mc('Clic cerrar',totClose)+mc('CTR CTA global',globalCtr+'%');
+
+  var cards = '';
+  keys.forEach(function(k) {
+    var d = filtered[k];
+    var ctr = pct(d.cta.usr, d.display.usr);
+    var cr = pct(d.close.usr, d.display.usr);
+    var badge = ctr>=15?'badge-ok':ctr>0?'badge-warn':'badge-err';
+    var cls = (d.cta.usr===0 && d.display.usr>0)?'pos-card problem':'pos-card';
+    cards += '<div class="'+cls+'">' +
+      '<div class="pos-title">'+k+' <span class="badge '+badge+'">'+ctr+'%</span></div>' +
+      '<div class="pos-sub">'+d.name+'</div>' +
+      sr('Display',d.display.ev+' ev / '+d.display.usr+' usr') +
+      sr('CTA clic',d.cta.ev+' ev / '+d.cta.usr+' usr') +
+      sr('Cerrar',d.close.ev+' ev / '+d.close.usr+' usr') +
+      '<div class="divider"></div>' +
+      sr('CTR CTA','<span class="'+(ctr>0?'highlight':'highlight-red')+'">'+ctr+'%</span>') +
+      sr('Tasa cierre',cr+'%') +
+      (d.cta.usr===0&&d.display.usr>0?'<div style="font-size:11px;color:#991b1b;padding-top:4px">0 clics registrados</div>':'') +
+      (d.display.usr<=2&&d.display.usr>0?'<div style="font-size:11px;color:#888;padding-top:4px">Volumen muy bajo</div>':'') +
+      '</div>';
+  });
+  document.getElementById('posCards').innerHTML = cards;
+
+  updateCharts(filtered, keys);
+  updateConclusions(filtered, keys, globalCtr);
+}
+
+function sr(l,v){ return '<div class="stat-row"><span class="stat-label">'+l+'</span><span class="stat-value">'+v+'</span></div>'; }
+function mc(l,v){ return '<div class="metric-card"><div class="metric-label">'+l+'</div><div class="metric-value">'+v+'</div></div>'; }
+
+function updateCharts(filtered, keys) {
+  var fDs = keys.map(function(k){ return { label:k, data:[filtered[k].display.usr, filtered[k].cta.usr, filtered[k].close.usr], backgroundColor:filtered[k].color, borderRadius:4, barPercentage:0.35 }; });
+  if (funnelChart) funnelChart.destroy();
+  funnelChart = new Chart(document.getElementById('funnelChart'), {
+    type:'bar', data:{ labels:['Vieron modulo','Clic CTA','Clic cerrar'], datasets:fDs },
+    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{legend:{display:false},tooltip:{enabled:true}},
+      scales:{ x:{ticks:{color:'#999'},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}, y:{ticks:{color:'#666'},grid:{display:false}} }
     }
+  });
+  var leg = keys.map(function(k){ return '<span class="legend-item"><span class="legend-dot" style="background:'+filtered[k].color+'"></span>'+k+'</span>'; }).join('');
+  document.getElementById('funnelLegend').innerHTML = leg;
+
+  var ctrData = keys.map(function(k){ return pct(filtered[k].cta.usr, filtered[k].display.usr); });
+  var crData = keys.map(function(k){ return pct(filtered[k].close.usr, filtered[k].display.usr); });
+  if (ctrChart) ctrChart.destroy();
+  ctrChart = new Chart(document.getElementById('ctrChart'), {
+    type:'bar', data:{ labels:keys, datasets:[
+      {label:'CTR CTA',data:ctrData,backgroundColor:'#1D9E75',borderRadius:4,barPercentage:0.35,suffix:'%'},
+      {label:'Tasa cierre',data:crData,backgroundColor:'#E24B4A',borderRadius:4,barPercentage:0.35,suffix:'%'}
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return ctx.dataset.label+': '+ctx.parsed.y+'%'}}}},
+      scales:{ x:{ticks:{color:'#666'},grid:{display:false}}, y:{ticks:{color:'#999',callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true} }
+    }
+  });
+}
+
+function updateConclusions(filtered, keys, globalCtr) {
+  var dev = document.getElementById('filterDevice').value;
+  var pos = document.getElementById('filterPOS').value;
+  var items = [];
+
+  items.push('<strong>1. CTR global del CTA: '+globalCtr+'%.</strong> '+(globalCtr>=15?'Buen rendimiento — casi 1 de cada 5 usuarios que ven el modulo vuelve al checkout.':'El CTR esta por debajo del 15%. Hay margen de mejora.'));
+
+  var best='',bestCtr=0,worst='',worstCtr=100;
+  keys.forEach(function(k){
+    if(filtered[k].display.usr<2) return;
+    var c=pct(filtered[k].cta.usr,filtered[k].display.usr);
+    if(c>bestCtr){bestCtr=c;best=k}
+    if(c<worstCtr){worstCtr=c;worst=k}
+  });
+  if(best&&keys.length>1) items.push('<strong>2. '+best+' lidera con '+bestCtr+'% de CTR.</strong> '+(worst!==best?worst+' tiene el CTR mas bajo ('+worstCtr+'%).':''));
+
+  if(dev==='all') {
+    items.push('<strong>3. Mobile domina el engagement.</strong> En FR, el CTR en mobile es del 25.6% vs 8.9% en desktop. Los cierres del modulo ocurren casi exclusivamente en desktop. El modulo funciona mejor en la experiencia movil.');
+  } else {
+    items.push('<strong>3. Filtro activo: '+dev+'.</strong> Estos datos muestran solo el segmento de '+dev+'.');
   }
-});
+
+  var itData = filtered['IT'];
+  if(itData && itData.display.usr>0 && itData.cta.usr===0) {
+    items.push('<strong>4. IT sigue con 0 clics — tracking roto.</strong> Se registran '+itData.display.ev+' eventos de display pero 0 clics. Requiere revision tecnica urgente.');
+  }
+
+  items.push('<strong>'+(itData?'5':'4')+'. Volumenes.</strong> '+(keys.reduce(function(s,k){return s+filtered[k].display.usr},0)>500?'Volumen razonable para primeras conclusiones, pero se recomienda seguir acumulando.':'Todavia insuficiente para significancia estadistica. Se recomienda acumular al menos 2 semanas.'));
+
+  document.getElementById('conclusions').innerHTML = '<h2>Conclusiones clave</h2>' + items.map(function(i){return '<div class="conclusion-item">'+i+'</div>'}).join('');
+}
+
+applyFilters();
 </script>
 </body>
 </html>
