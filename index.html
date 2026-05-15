@@ -13,17 +13,14 @@ h1{font-size:22px;font-weight:500;margin-bottom:4px}
 h2{font-size:18px;font-weight:500;margin-bottom:12px;margin-top:28px}
 .subtitle{font-size:14px;color:#666;margin-bottom:8px}
 .updated{font-size:12px;color:#999;margin-bottom:16px}
-.filters{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px;padding:12px 16px;background:#f8f7f5;border-radius:10px}
-.filters label{font-size:13px;color:#666;font-weight:500}
-.filters select{font-size:13px;padding:6px 10px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer}
-.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:24px}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:24px}
 .metric-card{background:#f5f5f3;border-radius:8px;padding:14px}
 .metric-label{font-size:12px;color:#666;margin-bottom:2px}
 .metric-value{font-size:22px;font-weight:500}
+.metric-sub{font-size:11px;color:#888;margin-top:2px}
 .pos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:14px;margin-bottom:28px}
 .pos-card{border:1px solid #e5e5e3;border-radius:12px;padding:14px 16px}
-.pos-card.problem{border-color:#fca5a5}
-.pos-card.hidden{display:none}
+.pos-card.low{border-style:dashed}
 .pos-title{font-size:16px;font-weight:500;margin-bottom:2px}
 .pos-sub{font-size:12px;color:#666;margin-bottom:10px}
 .stat-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}
@@ -38,8 +35,7 @@ h2{font-size:18px;font-weight:500;margin-bottom:12px;margin-top:28px}
 .badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:6px;font-weight:500}
 .badge-ok{background:#e1f5ee;color:#085041}
 .badge-warn{background:#fef3c7;color:#92400e}
-.badge-new{background:#eff6ff;color:#1e40af}
-.badge-err{background:#fef2f2;color:#991b1b}
+.badge-low{background:#f1f1ef;color:#666}
 .conclusions{background:#f8f7f5;border-radius:12px;padding:20px 24px;margin-bottom:24px}
 .conclusions h2{margin-top:0}
 .conclusion-item{padding:8px 0;border-bottom:1px solid #e5e5e3;font-size:14px;line-height:1.6}
@@ -47,237 +43,168 @@ h2{font-size:18px;font-weight:500;margin-bottom:12px;margin-top:28px}
 .conclusion-item strong{font-weight:500}
 .note{background:#eff6ff;border-radius:8px;padding:14px 16px;font-size:13px;color:#1e40af;line-height:1.7;margin-bottom:12px}
 .note b{font-weight:500}
-.warn{background:#fffbeb;border-radius:8px;padding:14px 16px;font-size:13px;color:#92400e;line-height:1.7;margin-bottom:12px}
-.warn b{font-weight:500}
 .footer{margin-top:32px;padding-top:16px;border-top:1px solid #e5e5e3;font-size:12px;color:#999}
-@media(max-width:600px){.pos-grid{grid-template-columns:1fr 1fr}.filters{flex-direction:column;align-items:flex-start}}
+@media(max-width:600px){.pos-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 
 <h1>Back 2 Cart — Segmento variante (5 POS)</h1>
-<p class="subtitle">Solo usuarios en variante (ID: ...a8dg1g) — Filtrado a nivel de evento via GA4 Data API</p>
-<p class="updated">Datos: 13–15 mayo 2026 · Ultima actualizacion: 15 mayo 2026</p>
+<p class="subtitle">Datos de exploraciones GA4 con segmentos a nivel de usuario — Solo variante</p>
+<p class="updated">Datos: 13–15 mayo 2026 · Fuente: GA4 Explorations (user-level segments) · Actualizado: 15 mayo 2026</p>
 
-<div class="filters">
-  <label>POS:</label>
-  <select id="filterPOS" onchange="applyFilters()">
-    <option value="all">Todos</option>
-    <option value="FR">FR</option>
-    <option value="ES">ES</option>
-    <option value="BE">BE</option>
-    <option value="NL">NL</option>
-    <option value="IT">IT</option>
-  </select>
-  <label>Device:</label>
-  <select id="filterDevice" onchange="applyFilters()">
-    <option value="all">Todos</option>
-    <option value="mobile">Mobile</option>
-    <option value="desktop">Desktop</option>
-    <option value="tablet">Tablet</option>
-  </select>
+<div class="metrics-grid">
+  <div class="metric-card"><div class="metric-label">Display (funnel)</div><div class="metric-value">315</div><div class="metric-sub">usuarios variante</div></div>
+  <div class="metric-card"><div class="metric-label">CTA Click</div><div class="metric-value">52</div><div class="metric-sub">16.5% del display</div></div>
+  <div class="metric-card"><div class="metric-label">Checkout</div><div class="metric-value">32</div><div class="metric-sub">61.5% del clic</div></div>
+  <div class="metric-card"><div class="metric-label">Purchase</div><div class="metric-value">10</div><div class="metric-sub">3.2% del display</div></div>
+  <div class="metric-card"><div class="metric-label">Dismiss</div><div class="metric-value">7</div><div class="metric-sub">2.2% del display</div></div>
 </div>
 
-<div class="metrics-grid" id="topMetrics"></div>
-<div class="pos-grid" id="posCards"></div>
+<div class="pos-grid">
+  <div class="pos-card">
+    <div class="pos-title">FR <span class="badge badge-ok">18.9%</span></div>
+    <div class="pos-sub">weekendesk.fr · 159 usr</div>
+    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">159 usr</span></div>
+    <div class="stat-row"><span class="stat-label">CTA clic</span><span class="stat-value">30 usr (18.9%)</span></div>
+    <div class="stat-row"><span class="stat-label">Checkout</span><span class="stat-value">19 usr (11.9%)</span></div>
+    <div class="stat-row"><span class="stat-label">Purchase</span><span class="stat-value highlight">8 usr (5.0%)</span></div>
+    <div class="divider"></div>
+    <div class="stat-row"><span class="stat-label">CTA→Checkout</span><span class="stat-value">63.3%</span></div>
+    <div class="stat-row"><span class="stat-label">CTA→Purchase</span><span class="stat-value">26.7%</span></div>
+    <div class="stat-row"><span class="stat-label">Close</span><span class="stat-value">7/6 (desktop)</span></div>
+  </div>
+  <div class="pos-card">
+    <div class="pos-title">ES <span class="badge badge-warn">13.2%</span></div>
+    <div class="pos-sub">weekendesk.es · 68 usr</div>
+    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">68 usr</span></div>
+    <div class="stat-row"><span class="stat-label">CTA clic</span><span class="stat-value">9 usr (13.2%)</span></div>
+    <div class="stat-row"><span class="stat-label">Checkout</span><span class="stat-value">6 usr (8.8%)</span></div>
+    <div class="stat-row"><span class="stat-label">Purchase</span><span class="stat-value">0 usr (0%)</span></div>
+    <div class="divider"></div>
+    <div class="stat-row"><span class="stat-label">CTA→Checkout</span><span class="stat-value">66.7%</span></div>
+    <div class="stat-row"><span class="stat-label">Dismiss</span><span class="stat-value">2 usr (2.9%)</span></div>
+    <div style="font-size:11px;color:#888;padding-top:4px">1 dismiss llego a checkout</div>
+  </div>
+  <div class="pos-card">
+    <div class="pos-title">BE <span class="badge badge-ok">17.5%</span></div>
+    <div class="pos-sub">weekendesk.be · 57 usr</div>
+    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">57 usr</span></div>
+    <div class="stat-row"><span class="stat-label">CTA clic</span><span class="stat-value">10 usr (17.5%)</span></div>
+    <div class="stat-row"><span class="stat-label">Checkout</span><span class="stat-value">6 usr (10.5%)</span></div>
+    <div class="stat-row"><span class="stat-label">Purchase</span><span class="stat-value highlight">1 usr (1.8%)</span></div>
+    <div class="divider"></div>
+    <div class="stat-row"><span class="stat-label">CTA→Checkout</span><span class="stat-value">60%</span></div>
+    <div class="stat-row"><span class="stat-label">Dismiss</span><span class="stat-value">2 usr (3.5%)</span></div>
+  </div>
+  <div class="pos-card low">
+    <div class="pos-title">NL <span class="badge badge-low">15 usr</span></div>
+    <div class="pos-sub">weekendesk.nl · bajo volumen</div>
+    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">15 usr</span></div>
+    <div class="stat-row"><span class="stat-label">CTA clic</span><span class="stat-value">3 usr (20%)</span></div>
+    <div class="stat-row"><span class="stat-label">Checkout</span><span class="stat-value">1 usr (6.7%)</span></div>
+    <div class="stat-row"><span class="stat-label">Purchase</span><span class="stat-value highlight">1 usr (6.7%)</span></div>
+    <div class="divider"></div>
+    <div class="stat-row"><span class="stat-label">Dismiss</span><span class="stat-value">1 usr (6.7%)</span></div>
+  </div>
+  <div class="pos-card low">
+    <div class="pos-title">IT <span class="badge badge-low">16 usr</span></div>
+    <div class="pos-sub">weekendesk.it · bajo volumen</div>
+    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">16 usr</span></div>
+    <div class="stat-row"><span class="stat-label">CTA clic</span><span class="stat-value">0 usr (0%)</span></div>
+    <div class="stat-row"><span class="stat-label">Checkout</span><span class="stat-value">0 usr (0%)</span></div>
+    <div class="stat-row"><span class="stat-label">Purchase</span><span class="stat-value">0 usr (0%)</span></div>
+    <div class="divider"></div>
+    <div class="stat-row"><span class="stat-label">Dismiss</span><span class="stat-value">0 usr (0%)</span></div>
+    <div style="font-size:11px;color:#888;padding-top:4px">Tableau: 4 purchases variante (no capturadas por GA4 con este volumen)</div>
+  </div>
+</div>
 
-<h2>Funnel variante — usuarios</h2>
-<div class="chart-wrap" style="height:280px"><canvas id="funnelChart"></canvas></div>
-<div id="funnelLegend" class="legend"></div>
-
-<h2>CTR del CTA por POS</h2>
-<div class="chart-wrap" style="height:220px"><canvas id="ctrChart"></canvas></div>
+<h2>Checkout funnel — variante por POS</h2>
+<div class="chart-wrap" style="height:300px"><canvas id="funnelChart"></canvas></div>
 <div class="legend">
-  <span class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>CTR del CTA (%)</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#E24B4A"></span>Tasa de cierre (%)</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#7F77DD"></span>FR</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#D85A30"></span>ES</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>BE</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#378ADD"></span>NL</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#888780"></span>IT</span>
 </div>
 
-<div class="conclusions" id="conclusions"></div>
+<h2>Tasas de conversion por paso — variante</h2>
+<div class="chart-wrap" style="height:240px"><canvas id="rateChart"></canvas></div>
+<div class="legend">
+  <span class="legend-item"><span class="legend-dot" style="background:#7F77DD"></span>Display→CTA (%)</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>CTA→Checkout (%)</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#D85A30"></span>Display→Purchase (%)</span>
+</div>
 
-<div class="note"><b>Segmentacion evento-level:</b> Estos datos filtran por hits donde <code>ab_test_variations</code> o <code>active_ab_test_variations</code> contiene el ID de la variante. FR usa <code>active_ab_test_variations</code>; ES, BE, NL, IT usan <code>ab_test_variations</code>.</div>
-<div class="warn"><b>Proxima actualizacion automatica:</b> Lunes 18 mayo a las 9:15h. El dashboard se actualiza de lunes a viernes.</div>
-<div class="footer">Generado el 15 mayo 2026 via GA4 Data API — FR (280303690), ES (302266263), BE (302251346), NL (302274658), IT (302218985)</div>
+<h2>Breakdown por device — clics variante (free-form)</h2>
+<div class="chart-wrap" style="height:220px"><canvas id="deviceChart"></canvas></div>
+<div class="legend">
+  <span class="legend-item"><span class="legend-dot" style="background:#7F77DD"></span>Mobile</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#D85A30"></span>Desktop</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>Tablet</span>
+</div>
+
+<div class="conclusions">
+  <h2>Conclusiones clave</h2>
+  <div class="conclusion-item"><strong>1. La feature genera compras reales.</strong> De 315 usuarios expuestos en la variante, 10 acabaron comprando (3.2%). FR lidera con 8 purchases, BE y NL con 1 cada uno. Esto demuestra que el Back 2 Cart no solo genera clics — convierte.</div>
+  <div class="conclusion-item"><strong>2. El funnel CTA→Checkout es muy eficiente.</strong> El 61.5% de quienes hacen clic en el CTA llegan al checkout (32 de 52). La conversion es consistente entre POS: FR 63%, ES 67%, BE 60%. El modulo atrae a usuarios con intencion real de compra.</div>
+  <div class="conclusion-item"><strong>3. Mobile domina el engagement.</strong> En FR, el 93% de los clics CTA vienen de mobile (28 de 30 usuarios en free-form). En ES, el 78% (7 de 9). Mobile tiene un CTR mas alto y genera la gran mayoria de las purchases (7 de 8 en FR).</div>
+  <div class="conclusion-item"><strong>4. El CTR del CTA es consistente entre mercados grandes.</strong> FR 18.9%, BE 17.5%, NL 20%, ES 13.2%. Los tres primeros estan muy alineados. ES queda algo por debajo — puede ser diferencia de mercado o de copy/localizacion.</div>
+  <div class="conclusion-item"><strong>5. La tasa de dismiss es muy baja — el modulo no molesta.</strong> Solo un 2.2% global cierra activamente el modulo (7 de 315). Dato curioso: en ES, 1 de los 2 usuarios que cerraron el modulo acabo yendo al checkout igualmente.</div>
+  <div class="conclusion-item"><strong>6. IT necesita mas volumen.</strong> 16 usuarios vieron el modulo con 0 interacciones en GA4. Sin embargo, Tableau registra 4 purchases en variante para el mismo periodo. Con un volumen tan bajo en IT, GA4 aun no tiene masa critica para reflejar las interacciones. No se descarta un problema de tracking, pero hay que esperar mas datos.</div>
+  <div class="conclusion-item"><strong>7. Volumen insuficiente para significancia en la mayoria de POS.</strong> Solo FR (159 usr) se acerca a un tamano evaluable. ES (68), BE (57), NL (15) e IT (16) necesitan mas tiempo. Se recomienda al menos 2 semanas de datos (~500+ usr por POS) para decisiones definitivas.</div>
+</div>
+
+<div class="note"><b>Fuente de datos:</b> Estos datos provienen de GA4 Explorations con segmentos a nivel de usuario (<code>ab_test_variations</code> begins with variant/control ID, at any point in time). Esto da cifras mas completas que la Data API, que solo filtra a nivel de evento. Los funnels usan Standard Funnel con breakdown por Device category.</div>
+
+<div class="footer">Generado el 15 mayo 2026 · Fuente: GA4 Explorations (user-level segments) · FR (280303690), ES (302266263), BE (302251346), NL (302274658), IT (302218985)</div>
 
 <script>
-var DATA = {
-  FR: {
-    name: 'weekendesk.fr', color: '#7F77DD',
-    display: { mobile:{ev:474,usr:207}, desktop:{ev:275,usr:101}, tablet:{ev:18,usr:9} },
-    cta:     { mobile:{ev:97,usr:53},  desktop:{ev:10,usr:9},   tablet:{ev:2,usr:1} },
-    close:   { mobile:{ev:0,usr:0},    desktop:{ev:18,usr:15},  tablet:{ev:5,usr:3} }
-  },
-  ES: {
-    name: 'weekendesk.es', color: '#D85A30',
-    display: { mobile:{ev:24,usr:13}, desktop:{ev:8,usr:7}, tablet:{ev:0,usr:0} },
-    cta:     { mobile:{ev:7,usr:3},   desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} },
-    close:   { mobile:{ev:0,usr:0},   desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} }
-  },
-  BE: {
-    name: 'weekendesk.be', color: '#1D9E75',
-    display: { mobile:{ev:25,usr:13}, desktop:{ev:3,usr:3}, tablet:{ev:0,usr:0} },
-    cta:     { mobile:{ev:2,usr:2},   desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} },
-    close:   { mobile:{ev:0,usr:0},   desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} }
-  },
-  NL: {
-    name: 'weekendesk.nl', color: '#378ADD',
-    display: { mobile:{ev:2,usr:2},  desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} },
-    cta:     { mobile:{ev:1,usr:1},  desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} },
-    close:   { mobile:{ev:0,usr:0},  desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} }
-  },
-  IT: {
-    name: 'weekendesk.it', color: '#E24B4A',
-    display: { mobile:{ev:3,usr:2},  desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} },
-    cta:     { mobile:{ev:0,usr:0},  desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} },
-    close:   { mobile:{ev:0,usr:0},  desktop:{ev:0,usr:0}, tablet:{ev:0,usr:0} }
-  }
-};
-var DEVICES = ['mobile','desktop','tablet'];
-var funnelChart, ctrChart;
-
-var dlPlugin = {
-  id:'dlPlugin',
-  afterDatasetsDraw: function(chart) {
-    var ctx = chart.ctx;
-    chart.data.datasets.forEach(function(ds,di) {
-      chart.getDatasetMeta(di).data.forEach(function(el,i) {
-        var val = ds.data[i]; if (!val) return;
-        ctx.save(); ctx.font='500 11px -apple-system,system-ui,sans-serif'; ctx.fillStyle='#1a1a1a';
-        if (chart.options.indexAxis==='y') { ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(String(val),el.x+5,el.y); }
-        else { ctx.textAlign='center'; ctx.textBaseline='bottom'; ctx.fillText(ds.suffix?val+ds.suffix:String(val),el.x,el.y-5); }
-        ctx.restore();
-      });
-    });
-  }
-};
+var dlPlugin={id:'dlPlugin',afterDatasetsDraw:function(chart){var ctx=chart.ctx;chart.data.datasets.forEach(function(ds,di){chart.getDatasetMeta(di).data.forEach(function(el,i){var val=ds.data[i];if(!val)return;ctx.save();ctx.font='500 11px -apple-system,system-ui,sans-serif';ctx.fillStyle='#1a1a1a';if(chart.options.indexAxis==='y'){ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(String(val),el.x+5,el.y)}else{ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText(ds.sfx?val+ds.sfx:String(val),el.x,el.y-5)}ctx.restore()})})}};
 Chart.register(dlPlugin);
 
-function agg(posData, device) {
-  if (device === 'all') {
-    var t = {ev:0,usr:0};
-    DEVICES.forEach(function(d){ t.ev+=posData[d].ev; t.usr+=posData[d].usr; });
-    return t;
+new Chart(document.getElementById('funnelChart'),{
+  type:'bar',
+  data:{labels:['Display','CTA Click','Checkout','Purchase'],datasets:[
+    {label:'FR',data:[159,30,19,8],backgroundColor:'#7F77DD',borderRadius:4,barPercentage:0.3},
+    {label:'ES',data:[68,9,6,0],backgroundColor:'#D85A30',borderRadius:4,barPercentage:0.3},
+    {label:'BE',data:[57,10,6,1],backgroundColor:'#1D9E75',borderRadius:4,barPercentage:0.3},
+    {label:'NL',data:[15,3,1,1],backgroundColor:'#378ADD',borderRadius:4,barPercentage:0.3},
+    {label:'IT',data:[16,0,0,0],backgroundColor:'#888780',borderRadius:4,barPercentage:0.3}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    plugins:{legend:{display:false},tooltip:{enabled:true}},
+    scales:{x:{ticks:{color:'#999'},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true},y:{ticks:{color:'#666'},grid:{display:false}}}
   }
-  return posData[device] || {ev:0,usr:0};
-}
+});
 
-function getFiltered() {
-  var pos = document.getElementById('filterPOS').value;
-  var dev = document.getElementById('filterDevice').value;
-  var keys = pos === 'all' ? Object.keys(DATA) : [pos];
-  var result = {};
-  keys.forEach(function(k) {
-    result[k] = {
-      name: DATA[k].name, color: DATA[k].color,
-      display: agg(DATA[k].display, dev),
-      cta: agg(DATA[k].cta, dev),
-      close: agg(DATA[k].close, dev)
-    };
-  });
-  return result;
-}
-
-function pct(a,b) { return b>0 ? Math.round(a/b*1000)/10 : 0; }
-
-function applyFilters() {
-  var filtered = getFiltered();
-  var keys = Object.keys(filtered);
-  var totDisp=0, totCta=0, totClose=0;
-  keys.forEach(function(k){ totDisp+=filtered[k].display.usr; totCta+=filtered[k].cta.usr; totClose+=filtered[k].close.usr; });
-  var globalCtr = pct(totCta, totDisp);
-
-  document.getElementById('topMetrics').innerHTML =
-    mc('Usuarios display',totDisp)+mc('Clic CTA',totCta)+mc('Clic cerrar',totClose)+mc('CTR CTA global',globalCtr+'%');
-
-  var cards = '';
-  keys.forEach(function(k) {
-    var d = filtered[k];
-    var ctr = pct(d.cta.usr, d.display.usr);
-    var cr = pct(d.close.usr, d.display.usr);
-    var badge = ctr>=15?'badge-ok':ctr>0?'badge-warn':'badge-err';
-    var cls = (d.cta.usr===0 && d.display.usr>0)?'pos-card problem':'pos-card';
-    cards += '<div class="'+cls+'">' +
-      '<div class="pos-title">'+k+' <span class="badge '+badge+'">'+ctr+'%</span></div>' +
-      '<div class="pos-sub">'+d.name+'</div>' +
-      sr('Display',d.display.ev+' ev / '+d.display.usr+' usr') +
-      sr('CTA clic',d.cta.ev+' ev / '+d.cta.usr+' usr') +
-      sr('Cerrar',d.close.ev+' ev / '+d.close.usr+' usr') +
-      '<div class="divider"></div>' +
-      sr('CTR CTA','<span class="'+(ctr>0?'highlight':'highlight-red')+'">'+ctr+'%</span>') +
-      sr('Tasa cierre',cr+'%') +
-      (d.cta.usr===0&&d.display.usr>0?'<div style="font-size:11px;color:#991b1b;padding-top:4px">0 clics registrados</div>':'') +
-      (d.display.usr<=2&&d.display.usr>0?'<div style="font-size:11px;color:#888;padding-top:4px">Volumen muy bajo</div>':'') +
-      '</div>';
-  });
-  document.getElementById('posCards').innerHTML = cards;
-
-  updateCharts(filtered, keys);
-  updateConclusions(filtered, keys, globalCtr);
-}
-
-function sr(l,v){ return '<div class="stat-row"><span class="stat-label">'+l+'</span><span class="stat-value">'+v+'</span></div>'; }
-function mc(l,v){ return '<div class="metric-card"><div class="metric-label">'+l+'</div><div class="metric-value">'+v+'</div></div>'; }
-
-function updateCharts(filtered, keys) {
-  var fDs = keys.map(function(k){ return { label:k, data:[filtered[k].display.usr, filtered[k].cta.usr, filtered[k].close.usr], backgroundColor:filtered[k].color, borderRadius:4, barPercentage:0.35 }; });
-  if (funnelChart) funnelChart.destroy();
-  funnelChart = new Chart(document.getElementById('funnelChart'), {
-    type:'bar', data:{ labels:['Vieron modulo','Clic CTA','Clic cerrar'], datasets:fDs },
-    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
-      plugins:{legend:{display:false},tooltip:{enabled:true}},
-      scales:{ x:{ticks:{color:'#999'},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}, y:{ticks:{color:'#666'},grid:{display:false}} }
-    }
-  });
-  var leg = keys.map(function(k){ return '<span class="legend-item"><span class="legend-dot" style="background:'+filtered[k].color+'"></span>'+k+'</span>'; }).join('');
-  document.getElementById('funnelLegend').innerHTML = leg;
-
-  var ctrData = keys.map(function(k){ return pct(filtered[k].cta.usr, filtered[k].display.usr); });
-  var crData = keys.map(function(k){ return pct(filtered[k].close.usr, filtered[k].display.usr); });
-  if (ctrChart) ctrChart.destroy();
-  ctrChart = new Chart(document.getElementById('ctrChart'), {
-    type:'bar', data:{ labels:keys, datasets:[
-      {label:'CTR CTA',data:ctrData,backgroundColor:'#1D9E75',borderRadius:4,barPercentage:0.35,suffix:'%'},
-      {label:'Tasa cierre',data:crData,backgroundColor:'#E24B4A',borderRadius:4,barPercentage:0.35,suffix:'%'}
-    ]},
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return ctx.dataset.label+': '+ctx.parsed.y+'%'}}}},
-      scales:{ x:{ticks:{color:'#666'},grid:{display:false}}, y:{ticks:{color:'#999',callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true} }
-    }
-  });
-}
-
-function updateConclusions(filtered, keys, globalCtr) {
-  var dev = document.getElementById('filterDevice').value;
-  var pos = document.getElementById('filterPOS').value;
-  var items = [];
-
-  items.push('<strong>1. CTR global del CTA: '+globalCtr+'%.</strong> '+(globalCtr>=15?'Buen rendimiento — casi 1 de cada 5 usuarios que ven el modulo vuelve al checkout.':'El CTR esta por debajo del 15%. Hay margen de mejora.'));
-
-  var best='',bestCtr=0,worst='',worstCtr=100;
-  keys.forEach(function(k){
-    if(filtered[k].display.usr<2) return;
-    var c=pct(filtered[k].cta.usr,filtered[k].display.usr);
-    if(c>bestCtr){bestCtr=c;best=k}
-    if(c<worstCtr){worstCtr=c;worst=k}
-  });
-  if(best&&keys.length>1) items.push('<strong>2. '+best+' lidera con '+bestCtr+'% de CTR.</strong> '+(worst!==best?worst+' tiene el CTR mas bajo ('+worstCtr+'%).':''));
-
-  if(dev==='all') {
-    items.push('<strong>3. Mobile domina el engagement.</strong> En FR, el CTR en mobile es del 25.6% vs 8.9% en desktop. Los cierres del modulo ocurren casi exclusivamente en desktop. El modulo funciona mejor en la experiencia movil.');
-  } else {
-    items.push('<strong>3. Filtro activo: '+dev+'.</strong> Estos datos muestran solo el segmento de '+dev+'.');
+new Chart(document.getElementById('rateChart'),{
+  type:'bar',
+  data:{labels:['FR','ES','BE','NL','IT'],datasets:[
+    {label:'Display→CTA',data:[18.9,13.2,17.5,20,0],backgroundColor:'#7F77DD',borderRadius:4,barPercentage:0.3,sfx:'%'},
+    {label:'CTA→Checkout',data:[63.3,66.7,60,33.3,0],backgroundColor:'#1D9E75',borderRadius:4,barPercentage:0.3,sfx:'%'},
+    {label:'Display→Purchase',data:[5.0,0,1.8,6.7,0],backgroundColor:'#D85A30',borderRadius:4,barPercentage:0.3,sfx:'%'}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return ctx.dataset.label+': '+ctx.parsed.y+'%'}}}},
+    scales:{x:{ticks:{color:'#666'},grid:{display:false}},y:{ticks:{color:'#999',callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}}
   }
+});
 
-  var itData = filtered['IT'];
-  if(itData && itData.display.usr>0 && itData.cta.usr===0) {
-    items.push('<strong>4. IT sigue con 0 clics — tracking roto.</strong> Se registran '+itData.display.ev+' eventos de display pero 0 clics. Requiere revision tecnica urgente.');
+new Chart(document.getElementById('deviceChart'),{
+  type:'bar',
+  data:{labels:['FR CTA','FR Close','ES CTA','ES Close','BE CTA'],datasets:[
+    {label:'Mobile',data:[28,0,7,0,2],backgroundColor:'#7F77DD',borderRadius:4,barPercentage:0.35},
+    {label:'Desktop',data:[1,6,1,2,0],backgroundColor:'#D85A30',borderRadius:4,barPercentage:0.35},
+    {label:'Tablet',data:[0,0,1,0,0],backgroundColor:'#1D9E75',borderRadius:4,barPercentage:0.35}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{enabled:true}},
+    scales:{x:{ticks:{color:'#666',maxRotation:45},grid:{display:false}},y:{ticks:{color:'#999'},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}}
   }
-
-  items.push('<strong>'+(itData?'5':'4')+'. Volumenes.</strong> '+(keys.reduce(function(s,k){return s+filtered[k].display.usr},0)>500?'Volumen razonable para primeras conclusiones, pero se recomienda seguir acumulando.':'Todavia insuficiente para significancia estadistica. Se recomienda acumular al menos 2 semanas.'));
-
-  document.getElementById('conclusions').innerHTML = '<h2>Conclusiones clave</h2>' + items.map(function(i){return '<div class="conclusion-item">'+i+'</div>'}).join('');
-}
-
-applyFilters();
+});
 </script>
 </body>
 </html>
