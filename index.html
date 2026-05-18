@@ -4,210 +4,273 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Back 2 Cart — 5 POS Dashboard (Variant)</title>
+<title>Back 2 Cart — A/B Test Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
 <style>
-:root{color-scheme:light}*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#fff;color:#1a1a1a;padding:24px;max-width:960px;margin:0 auto;line-height:1.6}
-h1{font-size:22px;font-weight:500;margin-bottom:4px}
-h2{font-size:18px;font-weight:500;margin-bottom:12px;margin-top:28px}
-.subtitle{font-size:14px;color:#666;margin-bottom:8px}
-.updated{font-size:12px;color:#999;margin-bottom:16px}
-.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:24px}
-.metric-card{background:#f5f5f3;border-radius:8px;padding:14px}
-.metric-label{font-size:12px;color:#666;margin-bottom:2px}
-.metric-value{font-size:22px;font-weight:500}
-.metric-sub{font-size:11px;color:#888;margin-top:2px}
-.pos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:14px;margin-bottom:28px}
-.pos-card{border:1px solid #e5e5e3;border-radius:12px;padding:14px 16px}
-.pos-card.low{border-style:dashed}
-.pos-title{font-size:16px;font-weight:500;margin-bottom:2px}
-.pos-sub{font-size:12px;color:#666;margin-bottom:10px}
-.stat-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}
-.stat-label{color:#666}.stat-value{font-weight:500}
-.highlight{color:#0f6e56;font-size:16px}
-.highlight-red{color:#991b1b;font-size:16px}
-.divider{border-top:1px solid #e5e5e3;margin:8px 0}
-.chart-wrap{position:relative;width:100%;margin-bottom:8px}
-.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#666;margin-bottom:24px}
-.legend-item{display:flex;align-items:center;gap:5px}
-.legend-dot{width:10px;height:10px;border-radius:2px}
-.badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:6px;font-weight:500}
-.badge-ok{background:#e1f5ee;color:#085041}
-.badge-warn{background:#fef3c7;color:#92400e}
-.badge-low{background:#f1f1ef;color:#666}
-.conclusions{background:#f8f7f5;border-radius:12px;padding:20px 24px;margin-bottom:24px}
-.conclusions h2{margin-top:0}
-.conclusion-item{padding:8px 0;border-bottom:1px solid #e5e5e3;font-size:14px;line-height:1.6}
-.conclusion-item:last-child{border-bottom:none}
-.conclusion-item strong{font-weight:500}
-.note{background:#eff6ff;border-radius:8px;padding:14px 16px;font-size:13px;color:#1e40af;line-height:1.7;margin-bottom:12px}
-.note b{font-weight:500}
-.footer{margin-top:32px;padding-top:16px;border-top:1px solid #e5e5e3;font-size:12px;color:#999}
-@media(max-width:600px){.pos-grid{grid-template-columns:1fr 1fr}}
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent-light: #ff6b81;
+    --bg: #f8f9fa;
+    --card-bg: #ffffff;
+    --text: #2d3436;
+    --text-light: #636e72;
+    --border: #dfe6e9;
+    --green: #00b894;
+    --orange: #fdcb6e;
+    --blue: #0984e3;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+  header { text-align: center; margin-bottom: 32px; }
+  header h1 { font-size: 28px; color: var(--primary); margin-bottom: 4px; }
+  header p { color: var(--text-light); font-size: 14px; }
+  .badge { display: inline-block; background: var(--accent); color: #fff; font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 12px; margin-left: 8px; vertical-align: middle; }
+  .date-range { font-size: 13px; color: var(--text-light); margin-top: 4px; }
+
+  /* Global metric cards */
+  .global-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+  .metric-card { background: var(--card-bg); border-radius: 10px; padding: 16px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .metric-card .label { font-size: 12px; color: var(--text-light); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+  .metric-card .value { font-size: 28px; font-weight: 700; color: var(--primary); }
+  .metric-card .sub { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+  .metric-card.highlight .value { color: var(--accent); }
+
+  /* POS cards */
+  .pos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .pos-card { background: var(--card-bg); border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); border-left: 4px solid var(--blue); }
+  .pos-card.low-volume { border-style: dashed; opacity: .75; }
+  .pos-card h3 { font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .pos-card h3 .flag { font-size: 20px; }
+  .pos-card .stat-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; border-bottom: 1px solid var(--border); }
+  .pos-card .stat-row:last-child { border-bottom: none; }
+  .pos-card .stat-row .stat-label { color: var(--text-light); }
+  .pos-card .stat-row .stat-value { font-weight: 600; }
+  .pos-card .ctr-highlight { color: var(--accent); font-size: 22px; font-weight: 700; text-align: center; margin-top: 10px; }
+  .pos-card .ctr-label { text-align: center; font-size: 11px; color: var(--text-light); text-transform: uppercase; }
+
+  .section-title { font-size: 18px; font-weight: 600; color: var(--primary); margin-bottom: 14px; margin-top: 8px; }
+  .chart-container { background: var(--card-bg); border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); margin-bottom: 24px; }
+  .chart-container canvas { max-height: 320px; }
+
+  /* Takeaways */
+  .takeaways { background: var(--card-bg); border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); margin-bottom: 24px; }
+  .takeaways ol { padding-left: 20px; }
+  .takeaways li { margin-bottom: 8px; font-size: 14px; line-height: 1.5; }
+
+  .notes { font-size: 12px; color: var(--text-light); background: var(--card-bg); border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .notes p { margin-bottom: 4px; }
+  footer { text-align: center; font-size: 11px; color: var(--text-light); padding: 16px 0; border-top: 1px solid var(--border); margin-top: 12px; }
+
+  @media (max-width: 600px) {
+    .global-metrics { grid-template-columns: repeat(2, 1fr); }
+    .pos-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
+<div class="container">
+  <header>
+    <h1>Back 2 Cart <span class="badge">A/B Test</span></h1>
+    <p>Variant <code>d829g1qj3sg000a8dg1g</code> — Modal performance across POS</p>
+    <div class="date-range">Data range: 13 May 2026 – 18 May 2026 (6 days)</div>
+  </header>
 
-<h1>Back 2 Cart — Variant segment (5 POS)</h1>
-<p class="subtitle">Data from GA4 Explorations with user-level segments — Variant only</p>
-<p class="updated">Data: May 13–15, 2026 · Source: GA4 Explorations (user-level segments) · Updated: May 15, 2026</p>
-
-<div class="metrics-grid">
-  <div class="metric-card"><div class="metric-label">Display (funnel)</div><div class="metric-value">315</div><div class="metric-sub">variant users</div></div>
-  <div class="metric-card"><div class="metric-label">CTA Click</div><div class="metric-value">52</div><div class="metric-sub">16.5% of display</div></div>
-  <div class="metric-card"><div class="metric-label">Checkout</div><div class="metric-value">32</div><div class="metric-sub">61.5% of click</div></div>
-  <div class="metric-card"><div class="metric-label">Purchase</div><div class="metric-value">10</div><div class="metric-sub">3.2% of display</div></div>
-  <div class="metric-card"><div class="metric-label">Dismiss</div><div class="metric-value">7</div><div class="metric-sub">2.2% of display</div></div>
-</div>
-
-<div class="pos-grid">
-  <div class="pos-card">
-    <div class="pos-title">FR <span class="badge badge-ok">18.9%</span></div>
-    <div class="pos-sub">weekendesk.fr · 159 usr</div>
-    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">159 usr</span></div>
-    <div class="stat-row"><span class="stat-label">CTA click</span><span class="stat-value">30 usr (18.9%)</span></div>
-    <div class="stat-row"><span class="stat-label">Checkout</span><span class="stat-value">19 usr (11.9%)</span></div>
-    <div class="stat-row"><span class="stat-label">Purchase</span><span class="stat-value highlight">8 usr (5.0%)</span></div>
-    <div class="divider"></div>
-    <div class="stat-row"><span class="stat-label">CTA→Checkout</span><span class="stat-value">63.3%</span></div>
-    <div class="stat-row"><span class="stat-label">CTA→Purchase</span><span class="stat-value">26.7%</span></div>
-    <div class="stat-row"><span class="stat-label">Close</span><span class="stat-value">7/6 (desktop)</span></div>
+  <!-- Global Metrics -->
+  <div class="global-metrics">
+    <div class="metric-card">
+      <div class="label">Display Users</div>
+      <div class="value">976</div>
+      <div class="sub">2,458 events</div>
+    </div>
+    <div class="metric-card highlight">
+      <div class="label">CTA Click Users</div>
+      <div class="value">189</div>
+      <div class="sub">321 events</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Close Users</div>
+      <div class="value">40</div>
+      <div class="sub">50 events</div>
+    </div>
+    <div class="metric-card highlight">
+      <div class="label">Global CTR</div>
+      <div class="value">19.4%</div>
+      <div class="sub">Close rate: 4.1%</div>
+    </div>
   </div>
-  <div class="pos-card">
-    <div class="pos-title">ES <span class="badge badge-warn">13.2%</span></div>
-    <div class="pos-sub">weekendesk.es · 68 usr</div>
-    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">68 usr</span></div>
-    <div class="stat-row"><span class="stat-label">CTA click</span><span class="stat-value">9 usr (13.2%)</span></div>
-    <div class="stat-row"><span class="stat-label">Checkout</span><span class="stat-value">6 usr (8.8%)</span></div>
-    <div class="stat-row"><span class="stat-label">Purchase</span><span class="stat-value">0 usr (0%)</span></div>
-    <div class="divider"></div>
-    <div class="stat-row"><span class="stat-label">CTA→Checkout</span><span class="stat-value">66.7%</span></div>
-    <div class="stat-row"><span class="stat-label">Dismiss</span><span class="stat-value">2 usr (2.9%)</span></div>
-    <div style="font-size:11px;color:#888;padding-top:4px">1 dismiss still reached checkout</div>
+
+  <!-- POS Cards -->
+  <h2 class="section-title">Performance by POS</h2>
+  <div class="pos-grid">
+    <!-- FR -->
+    <div class="pos-card">
+      <h3><span class="flag">🇫🇷</span> France</h3>
+      <div class="stat-row"><span class="stat-label">Display events</span><span class="stat-value">2,037</span></div>
+      <div class="stat-row"><span class="stat-label">Display users</span><span class="stat-value">778</span></div>
+      <div class="stat-row"><span class="stat-label">CTA click events</span><span class="stat-value">277</span></div>
+      <div class="stat-row"><span class="stat-label">CTA click users</span><span class="stat-value">162</span></div>
+      <div class="stat-row"><span class="stat-label">Close events</span><span class="stat-value">45</span></div>
+      <div class="stat-row"><span class="stat-label">Close users</span><span class="stat-value">36</span></div>
+      <div class="ctr-highlight">20.8%</div>
+      <div class="ctr-label">CTR CTA · Close rate 4.6%</div>
+    </div>
+    <!-- ES -->
+    <div class="pos-card">
+      <h3><span class="flag">🇪🇸</span> Spain</h3>
+      <div class="stat-row"><span class="stat-label">Display events</span><span class="stat-value">208</span></div>
+      <div class="stat-row"><span class="stat-label">Display users</span><span class="stat-value">108</span></div>
+      <div class="stat-row"><span class="stat-label">CTA click events</span><span class="stat-value">25</span></div>
+      <div class="stat-row"><span class="stat-label">CTA click users</span><span class="stat-value">13</span></div>
+      <div class="stat-row"><span class="stat-label">Close events</span><span class="stat-value">3</span></div>
+      <div class="stat-row"><span class="stat-label">Close users</span><span class="stat-value">2</span></div>
+      <div class="ctr-highlight">12.0%</div>
+      <div class="ctr-label">CTR CTA · Close rate 1.9%</div>
+    </div>
+    <!-- BE -->
+    <div class="pos-card">
+      <h3><span class="flag">🇧🇪</span> Belgium</h3>
+      <div class="stat-row"><span class="stat-label">Display events</span><span class="stat-value">165</span></div>
+      <div class="stat-row"><span class="stat-label">Display users</span><span class="stat-value">66</span></div>
+      <div class="stat-row"><span class="stat-label">CTA click events</span><span class="stat-value">16</span></div>
+      <div class="stat-row"><span class="stat-label">CTA click users</span><span class="stat-value">12</span></div>
+      <div class="stat-row"><span class="stat-label">Close events</span><span class="stat-value">2</span></div>
+      <div class="stat-row"><span class="stat-label">Close users</span><span class="stat-value">2</span></div>
+      <div class="ctr-highlight">18.2%</div>
+      <div class="ctr-label">CTR CTA · Close rate 3.0%</div>
+    </div>
+    <!-- NL -->
+    <div class="pos-card low-volume">
+      <h3><span class="flag">🇳🇱</span> Netherlands</h3>
+      <div class="stat-row"><span class="stat-label">Display events</span><span class="stat-value">16</span></div>
+      <div class="stat-row"><span class="stat-label">Display users</span><span class="stat-value">10</span></div>
+      <div class="stat-row"><span class="stat-label">CTA click events</span><span class="stat-value">3</span></div>
+      <div class="stat-row"><span class="stat-label">CTA click users</span><span class="stat-value">2</span></div>
+      <div class="stat-row"><span class="stat-label">Close events</span><span class="stat-value">0</span></div>
+      <div class="stat-row"><span class="stat-label">Close users</span><span class="stat-value">0</span></div>
+      <div class="ctr-highlight">20.0%</div>
+      <div class="ctr-label">CTR CTA · Close rate 0.0%</div>
+    </div>
+    <!-- IT -->
+    <div class="pos-card low-volume">
+      <h3><span class="flag">🇮🇹</span> Italy</h3>
+      <div class="stat-row"><span class="stat-label">Display events</span><span class="stat-value">32</span></div>
+      <div class="stat-row"><span class="stat-label">Display users</span><span class="stat-value">14</span></div>
+      <div class="stat-row"><span class="stat-label">CTA click events</span><span class="stat-value">0</span></div>
+      <div class="stat-row"><span class="stat-label">CTA click users</span><span class="stat-value">0</span></div>
+      <div class="stat-row"><span class="stat-label">Close events</span><span class="stat-value">0</span></div>
+      <div class="stat-row"><span class="stat-label">Close users</span><span class="stat-value">0</span></div>
+      <div class="ctr-highlight" style="color:var(--text-light)">0.0%</div>
+      <div class="ctr-label">CTR CTA · Close rate 0.0%</div>
+    </div>
   </div>
-  <div class="pos-card">
-    <div class="pos-title">BE <span class="badge badge-ok">17.5%</span></div>
-    <div class="pos-sub">weekendesk.be · 57 usr</div>
-    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">57 usr</span></div>
-    <div class="stat-row"><span class="stat-label">CTA click</span><span class="stat-value">10 usr (17.5%)</span></div>
-    <div class="stat-row"><span class="stat-label">Checkout</span><span class="stat-value">6 usr (10.5%)</span></div>
-    <div class="stat-row"><span class="stat-label">Purchase</span><span class="stat-value highlight">1 usr (1.8%)</span></div>
-    <div class="divider"></div>
-    <div class="stat-row"><span class="stat-label">CTA→Checkout</span><span class="stat-value">60%</span></div>
-    <div class="stat-row"><span class="stat-label">Dismiss</span><span class="stat-value">2 usr (3.5%)</span></div>
+
+  <!-- Funnel Chart -->
+  <h2 class="section-title">Funnel by POS (users)</h2>
+  <div class="chart-container">
+    <canvas id="funnelChart"></canvas>
   </div>
-  <div class="pos-card low">
-    <div class="pos-title">NL <span class="badge badge-low">15 usr</span></div>
-    <div class="pos-sub">weekendesk.nl · low volume</div>
-    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">15 usr</span></div>
-    <div class="stat-row"><span class="stat-label">CTA click</span><span class="stat-value">3 usr (20%)</span></div>
-    <div class="stat-row"><span class="stat-label">Checkout</span><span class="stat-value">1 usr (6.7%)</span></div>
-    <div class="stat-row"><span class="stat-label">Purchase</span><span class="stat-value highlight">1 usr (6.7%)</span></div>
-    <div class="divider"></div>
-    <div class="stat-row"><span class="stat-label">Dismiss</span><span class="stat-value">1 usr (6.7%)</span></div>
+
+  <!-- CTR Comparison -->
+  <h2 class="section-title">CTR &amp; Close Rate Comparison</h2>
+  <div class="chart-container">
+    <canvas id="ctrChart"></canvas>
   </div>
-  <div class="pos-card low">
-    <div class="pos-title">IT <span class="badge badge-low">16 usr</span></div>
-    <div class="pos-sub">weekendesk.it · low volume</div>
-    <div class="stat-row"><span class="stat-label">Display</span><span class="stat-value">16 usr</span></div>
-    <div class="stat-row"><span class="stat-label">CTA click</span><span class="stat-value">0 usr (0%)</span></div>
-    <div class="stat-row"><span class="stat-label">Checkout</span><span class="stat-value">0 usr (0%)</span></div>
-    <div class="stat-row"><span class="stat-label">Purchase</span><span class="stat-value">0 usr (0%)</span></div>
-    <div class="divider"></div>
-    <div class="stat-row"><span class="stat-label">Dismiss</span><span class="stat-value">0 usr (0%)</span></div>
-    <div style="font-size:11px;color:#888;padding-top:4px">Tableau: 4 variant purchases (not captured by GA4 at this volume)</div>
+
+  <!-- Key Takeaways -->
+  <h2 class="section-title">Key Takeaways</h2>
+  <div class="takeaways">
+    <ol>
+      <li><strong>France dominates volume and performance.</strong> With 778 display users (79.7% of total traffic), FR is the only POS with enough volume for meaningful analysis. Its 20.8% CTR is the highest among POS with significant data.</li>
+      <li><strong>Spain shows moderate engagement at 12.0% CTR</strong> — the lowest among POS with recorded clicks. With only 108 display users and 13 CTA clickers, the sample remains small but directionally interesting. Close rate is also low at 1.9%, suggesting users who see the modal in ES are less inclined to interact.</li>
+      <li><strong>Belgium performs well at 18.2% CTR</strong> with 66 display users. Although volume is limited, the engagement pattern is closer to FR, which may reflect similar francophone user behaviour.</li>
+      <li><strong>Netherlands and Italy remain extremely low volume</strong> (10 and 14 display users respectively). NL shows a nominal 20.0% CTR but with only 2 CTA clickers — statistically meaningless. These POS need more time to accumulate actionable data.</li>
+      <li><strong>Italy still registers zero clicks.</strong> After 6 days, IT has 14 display users but 0 CTA clicks and 0 close clicks. This could indicate a tracking issue, very low cart-abandonment return traffic, or that the modal is not rendering correctly on IT. Worth investigating.</li>
+      <li><strong>Statistical significance is not yet reached</strong> for any POS except possibly FR. At ~189 total CTA clickers globally, we need to continue running the test. FR alone may reach significance within the next week if traffic remains stable.</li>
+      <li><strong>Close rates are uniformly low</strong> (4.1% global), which is positive — users who see the modal are not dismissing it at high rates. The ratio of CTA clicks to closes is roughly 4.7:1 globally.</li>
+    </ol>
   </div>
-</div>
 
-<h2>Checkout funnel — variant by POS</h2>
-<div class="chart-wrap" style="height:300px"><canvas id="funnelChart"></canvas></div>
-<div class="legend">
-  <span class="legend-item"><span class="legend-dot" style="background:#7F77DD"></span>FR</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#D85A30"></span>ES</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>BE</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#378ADD"></span>NL</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#888780"></span>IT</span>
-</div>
+  <!-- Notes -->
+  <div class="notes">
+    <p><strong>Data source:</strong> Google Analytics 4 Data API — segmented by <code>customEvent:active_ab_test_variations</code> CONTAINS <code>d829g1qj3sg000a8dg1g</code>.</p>
+    <p><strong>Display:</strong> <code>display_back_to_cart</code> event. <strong>CTA clicks:</strong> <code>custom_click</code> with target containing <code>backtocart_cta</code>. <strong>Close:</strong> target containing <code>backtocart_close</code>.</p>
+    <p><strong>CTR CTA</strong> = CTA click users / display users × 100. <strong>Close rate</strong> = close users / display users × 100.</p>
+    <p>Low-volume POS (dashed borders) have fewer than 50 display users — metrics shown for reference only.</p>
+  </div>
 
-<h2>Step conversion rates — variant</h2>
-<div style="font-size:13px;color:#666;margin-bottom:12px;line-height:1.6">
-  <strong style="font-weight:500;color:#1a1a1a">Display→CTA:</strong> % of users who saw the module and clicked the CTA to return to checkout. &nbsp;
-  <strong style="font-weight:500;color:#1a1a1a">CTA→Checkout:</strong> % of users who clicked the CTA and reached the checkout step. &nbsp;
-  <strong style="font-weight:500;color:#1a1a1a">Display→Purchase:</strong> % of users who saw the module and completed a purchase (end-to-end conversion).
+  <footer>
+    Generated on 18 May 2026 at 09:15 CEST · GA4 Properties: FR 280303690 · ES 302266263 · BE 302251346 · NL 302274658 · IT 302218985
+  </footer>
 </div>
-<div class="chart-wrap" style="height:240px"><canvas id="rateChart"></canvas></div>
-<div class="legend">
-  <span class="legend-item"><span class="legend-dot" style="background:#7F77DD"></span>Display→CTA (%)</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>CTA→Checkout (%)</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#D85A30"></span>Display→Purchase (%)</span>
-</div>
-
-<h2>Device breakdown — variant clicks (free-form)</h2>
-<div class="chart-wrap" style="height:220px"><canvas id="deviceChart"></canvas></div>
-<div class="legend">
-  <span class="legend-item"><span class="legend-dot" style="background:#7F77DD"></span>Mobile</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#D85A30"></span>Desktop</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>Tablet</span>
-</div>
-
-<div class="conclusions">
-  <h2>Key takeaways</h2>
-  <div class="conclusion-item"><strong>1. The feature drives real purchases.</strong> Out of 315 variant users exposed to the module, 10 ended up purchasing (3.2%). FR leads with 8 purchases, BE and NL with 1 each. Back 2 Cart doesn't just generate clicks — it converts.</div>
-  <div class="conclusion-item"><strong>2. The CTA→Checkout funnel is highly efficient.</strong> 61.5% of users who click the CTA reach checkout (32 out of 52). Conversion is consistent across POS: FR 63%, ES 67%, BE 60%. The module attracts users with real purchase intent.</div>
-  <div class="conclusion-item"><strong>3. Mobile dominates engagement.</strong> In FR, 93% of CTA clicks come from mobile (28 out of 30 users in free-form). In ES, 78% (7 out of 9). Mobile has a higher CTR and generates the vast majority of purchases (7 out of 8 in FR).</div>
-  <div class="conclusion-item"><strong>4. CTA click-through rate is consistent across major markets.</strong> FR 18.9%, BE 17.5%, NL 20%, ES 13.2%. The first three are closely aligned. ES is slightly below — this could be a market difference or a copy/localization issue.</div>
-  <div class="conclusion-item"><strong>5. Dismiss rate is very low — the module doesn't annoy users.</strong> Only 2.2% actively close the module (7 out of 315). Interesting finding: in ES, 1 out of 2 users who dismissed the module still went to checkout.</div>
-  <div class="conclusion-item"><strong>6. IT needs more volume.</strong> 16 users saw the module with 0 interactions in GA4. However, Tableau records 4 variant purchases for the same period. With such low volume in IT, GA4 doesn't yet have critical mass to reflect interactions. A tracking issue cannot be ruled out, but more data is needed.</div>
-  <div class="conclusion-item"><strong>7. Sample sizes are insufficient for statistical significance in most POS.</strong> Only FR (159 usr) approaches an evaluable size. ES (68), BE (57), NL (15) and IT (16) need more time. At least 2 weeks of data (~500+ users per POS) is recommended before making definitive decisions.</div>
-</div>
-
-<div class="note"><b>Data source:</b> This data comes from GA4 Explorations with user-level segments (<code>ab_test_variations</code> begins with variant/control ID, at any point in time). This provides more complete figures than the Data API, which only filters at event level. Funnels use Standard Funnel with Device category breakdown.</div>
-
-<div class="footer">Generated May 15, 2026 · Source: GA4 Explorations (user-level segments) · FR (280303690), ES (302266263), BE (302251346), NL (302274658), IT (302218985)</div>
 
 <script>
-var dlPlugin={id:'dlPlugin',afterDatasetsDraw:function(chart){var ctx=chart.ctx;chart.data.datasets.forEach(function(ds,di){chart.getDatasetMeta(di).data.forEach(function(el,i){var val=ds.data[i];if(!val)return;ctx.save();ctx.font='500 11px -apple-system,system-ui,sans-serif';ctx.fillStyle='#1a1a1a';if(chart.options.indexAxis==='y'){ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(String(val),el.x+5,el.y)}else{ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText(ds.sfx?val+ds.sfx:String(val),el.x,el.y-5)}ctx.restore()})})}};
-Chart.register(dlPlugin);
-
-new Chart(document.getElementById('funnelChart'),{
-  type:'bar',
-  data:{labels:['Display','CTA Click','Checkout','Purchase'],datasets:[
-    {label:'FR',data:[159,30,19,8],backgroundColor:'#7F77DD',borderRadius:4,barPercentage:0.3},
-    {label:'ES',data:[68,9,6,0],backgroundColor:'#D85A30',borderRadius:4,barPercentage:0.3},
-    {label:'BE',data:[57,10,6,1],backgroundColor:'#1D9E75',borderRadius:4,barPercentage:0.3},
-    {label:'NL',data:[15,3,1,1],backgroundColor:'#378ADD',borderRadius:4,barPercentage:0.3},
-    {label:'IT',data:[16,0,0,0],backgroundColor:'#888780',borderRadius:4,barPercentage:0.3}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-    plugins:{legend:{display:false},tooltip:{enabled:true}},
-    scales:{x:{ticks:{color:'#999'},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true},y:{ticks:{color:'#666'},grid:{display:false}}}
+// Custom plugin to render data labels on bars
+const dataLabelPlugin = {
+  id: 'dataLabels',
+  afterDatasetsDraw(chart) {
+    const { ctx } = chart;
+    chart.data.datasets.forEach((dataset, i) => {
+      const meta = chart.getDatasetMeta(i);
+      meta.data.forEach((bar, index) => {
+        const value = dataset.data[index];
+        if (value === 0 || value === null) return;
+        ctx.save();
+        ctx.fillStyle = '#2d3436';
+        ctx.font = 'bold 12px -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        if (chart.config.type === 'bar' && chart.options.indexAxis === 'y') {
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(typeof value === 'number' && value < 100 ? value.toFixed(1) + '%' : value, bar.x + 6, bar.y);
+        } else {
+          const label = typeof value === 'number' && value < 100 ? value.toFixed(1) + '%' : value;
+          ctx.fillText(label, bar.x, bar.y - 4);
+        }
+        ctx.restore();
+      });
+    });
   }
+};
+
+Chart.register(dataLabelPlugin);
+
+// Funnel chart
+new Chart(document.getElementById('funnelChart'), {
+  type: 'bar',
+  data: {
+    labels: ['FR', 'ES', 'BE', 'NL', 'IT'],
+    datasets: [
+      { label: 'Display users', data: [778, 108, 66, 10, 14], backgroundColor: '#0984e3' },
+      { label: 'CTA click users', data: [162, 13, 12, 2, 0], backgroundColor: '#e94560' },
+      { label: 'Close users', data: [36, 2, 2, 0, 0], backgroundColor: '#fdcb6e' }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { dataLabels: false, legend: { position: 'top' } },
+    scales: { x: { beginAtZero: true, title: { display: true, text: 'Users' } } }
+  },
+  plugins: []
 });
 
-new Chart(document.getElementById('rateChart'),{
-  type:'bar',
-  data:{labels:['FR','ES','BE','NL','IT'],datasets:[
-    {label:'Display→CTA',data:[18.9,13.2,17.5,20,0],backgroundColor:'#7F77DD',borderRadius:4,barPercentage:0.3,sfx:'%'},
-    {label:'CTA→Checkout',data:[63.3,66.7,60,33.3,0],backgroundColor:'#1D9E75',borderRadius:4,barPercentage:0.3,sfx:'%'},
-    {label:'Display→Purchase',data:[5.0,0,1.8,6.7,0],backgroundColor:'#D85A30',borderRadius:4,barPercentage:0.3,sfx:'%'}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return ctx.dataset.label+': '+ctx.parsed.y+'%'}}}},
-    scales:{x:{ticks:{color:'#666'},grid:{display:false}},y:{ticks:{color:'#999',callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}}
-  }
-});
-
-new Chart(document.getElementById('deviceChart'),{
-  type:'bar',
-  data:{labels:['FR CTA','FR Close','ES CTA','ES Close','BE CTA'],datasets:[
-    {label:'Mobile',data:[28,0,7,0,2],backgroundColor:'#7F77DD',borderRadius:4,barPercentage:0.35},
-    {label:'Desktop',data:[1,6,1,2,0],backgroundColor:'#D85A30',borderRadius:4,barPercentage:0.35},
-    {label:'Tablet',data:[0,0,1,0,0],backgroundColor:'#1D9E75',borderRadius:4,barPercentage:0.35}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{enabled:true}},
-    scales:{x:{ticks:{color:'#666',maxRotation:45},grid:{display:false}},y:{ticks:{color:'#999'},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}}
+// CTR comparison chart
+new Chart(document.getElementById('ctrChart'), {
+  type: 'bar',
+  data: {
+    labels: ['FR', 'ES', 'BE', 'NL', 'IT'],
+    datasets: [
+      { label: 'CTR CTA (%)', data: [20.8, 12.0, 18.2, 20.0, 0.0], backgroundColor: '#e94560' },
+      { label: 'Close Rate (%)', data: [4.6, 1.9, 3.0, 0.0, 0.0], backgroundColor: '#636e72' }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { dataLabels: true, legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + '%' } } },
+    scales: { y: { beginAtZero: true, max: 30, title: { display: true, text: '%' } } }
   }
 });
 </script>
