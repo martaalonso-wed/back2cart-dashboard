@@ -4,213 +4,235 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Back 2 Cart A/B Test Dashboard</title>
+<title>Back 2 Cart — A/B Test Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#f5f6fa;color:#2d3436;line-height:1.6}
-.container{max-width:960px;margin:0 auto;padding:20px}
-h1{font-size:1.6rem;font-weight:700;margin-bottom:4px}
-.subtitle{color:#636e72;font-size:.9rem;margin-bottom:20px}
-.filter-bar{background:#eef1f5;border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center}
-.filter-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.filter-label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#636e72;margin-right:4px}
-.pill{display:inline-flex;align-items:center;padding:5px 14px;border-radius:20px;font-size:.8rem;font-weight:600;cursor:pointer;border:2px solid #b2bec3;color:#636e72;background:#fff;transition:all .15s;user-select:none}
-.pill.active{background:#6c5ce7;border-color:#6c5ce7;color:#fff}
-.pill:hover{border-color:#6c5ce7}
-.metrics-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
-.metric-card{background:#fff;border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.metric-card .value{font-size:1.8rem;font-weight:800;color:#2d3436}
-.metric-card .label{font-size:.75rem;color:#636e72;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
-.pos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:28px}
-.pos-card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #ddd}
-.pos-card.low-volume{border-style:dashed;opacity:.75}
-.pos-card h3{font-size:1rem;margin-bottom:10px}
-.pos-card .stat-row{display:flex;justify-content:space-between;font-size:.85rem;padding:3px 0;border-bottom:1px solid #f0f0f0}
-.pos-card .stat-row:last-child{border-bottom:none}
-.pos-card .stat-label{color:#636e72}
-.pos-card .stat-value{font-weight:700}
-.chart-section{background:#fff;border-radius:10px;padding:20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.chart-section h2{font-size:1.1rem;margin-bottom:14px;color:#2d3436}
-.takeaways{background:#fff;border-radius:10px;padding:20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.takeaways h2{font-size:1.1rem;margin-bottom:10px}
-.takeaways ul{list-style:none;padding:0}
-.takeaways li{padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:.9rem}
-.takeaways li:last-child{border-bottom:none}
-.takeaways li::before{content:'→ ';color:#6c5ce7;font-weight:700}
-.note{background:#ffeaa7;border-radius:8px;padding:12px 16px;font-size:.8rem;margin-bottom:16px;color:#636e72}
-footer{text-align:center;font-size:.75rem;color:#b2bec3;padding:16px 0;border-top:1px solid #dfe6e9;margin-top:20px}
-canvas{max-height:320px}
+  :root {
+    --fr: #7F77DD; --es: #E8594F; --be: #F5A623; --nl: #FF6B35; --it: #4ECDC4;
+    --bg: #f7f8fa; --card: #ffffff; --text: #1a1a2e; --muted: #6b7280;
+    --border: #e5e7eb; --pill-bg: #f3f4f6; --pill-active: #374151;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+  h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 20px; }
+  .filter-bar { background: #eef0f4; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+  .filter-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .filter-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-right: 4px; }
+  .pill { display: inline-flex; align-items: center; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 500; cursor: pointer; border: 1.5px solid #c9cdd4; background: transparent; color: #6b7280; transition: all 0.15s; user-select: none; }
+  .pill.active { background: var(--pill-active); color: #fff; border-color: var(--pill-active); }
+  .pill:hover { border-color: #9ca3af; }
+  .pill.active:hover { opacity: 0.9; }
+  .pill.pos-fr.active { background: var(--fr); border-color: var(--fr); }
+  .pill.pos-es.active { background: var(--es); border-color: var(--es); }
+  .pill.pos-be.active { background: var(--be); border-color: var(--be); }
+  .pill.pos-nl.active { background: var(--nl); border-color: var(--nl); }
+  .pill.pos-it.active { background: var(--it); border-color: var(--it); }
+
+  .metrics-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .metric-card { background: var(--card); border-radius: 10px; padding: 16px; border: 1px solid var(--border); text-align: center; }
+  .metric-card .value { font-size: 1.8rem; font-weight: 700; }
+  .metric-card .label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+  .pos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .pos-card { background: var(--card); border-radius: 10px; padding: 16px; border-left: 4px solid; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .pos-card.low-volume { border-style: dashed; opacity: 0.75; }
+  .pos-card .pos-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; }
+  .pos-card .stat { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 3px 0; }
+  .pos-card .stat .k { color: var(--muted); }
+
+  .chart-section { background: var(--card); border-radius: 10px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px; }
+  .chart-section h3 { font-size: 1rem; font-weight: 600; margin-bottom: 12px; }
+  .chart-wrap { position: relative; height: 260px; }
+
+  .takeaways { background: var(--card); border-radius: 10px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px; }
+  .takeaways h3 { font-size: 1rem; font-weight: 600; margin-bottom: 10px; }
+  .takeaways ul { list-style: disc; padding-left: 20px; }
+  .takeaways li { font-size: 0.88rem; margin-bottom: 6px; color: #374151; }
+
+  .notes { font-size: 0.78rem; color: var(--muted); margin-bottom: 12px; line-height: 1.6; }
+  .footer { font-size: 0.72rem; color: #9ca3af; text-align: center; padding-top: 16px; border-top: 1px solid var(--border); }
 </style>
 </head>
 <body>
 <div class="container">
-<h1>Back 2 Cart — A/B Test Dashboard</h1>
-<p class="subtitle">Variant <code>d829g1qj3sg000a8dg1g</code> · Data from 13 May – 18 May 2026</p>
+  <h1>Back 2 Cart — A/B Test Dashboard</h1>
+  <p class="subtitle">Variant <code>d829g1qj3sg000a8dg1g</code> · 13 May – 19 May 2026</p>
 
-<div class="filter-bar">
-  <div class="filter-group">
-    <span class="filter-label">POS</span>
-    <span class="pill active" data-filter="pos" data-value="all" onclick="toggleFilter(this)">All</span>
-    <span class="pill active" data-filter="pos" data-value="FR" onclick="toggleFilter(this)">FR</span>
-    <span class="pill active" data-filter="pos" data-value="ES" onclick="toggleFilter(this)">ES</span>
-    <span class="pill active" data-filter="pos" data-value="BE" onclick="toggleFilter(this)">BE</span>
-    <span class="pill active" data-filter="pos" data-value="NL" onclick="toggleFilter(this)">NL</span>
-    <span class="pill active" data-filter="pos" data-value="IT" onclick="toggleFilter(this)">IT</span>
+  <!-- FILTERS -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <span class="filter-label">POS</span>
+      <button class="pill active" data-filter="pos" data-value="all">All</button>
+      <button class="pill pos-fr active" data-filter="pos" data-value="FR">FR</button>
+      <button class="pill pos-es active" data-filter="pos" data-value="ES">ES</button>
+      <button class="pill pos-be active" data-filter="pos" data-value="BE">BE</button>
+      <button class="pill pos-nl active" data-filter="pos" data-value="NL">NL</button>
+      <button class="pill pos-it active" data-filter="pos" data-value="IT">IT</button>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Device</span>
+      <button class="pill active" data-filter="device" data-value="all">All</button>
+      <button class="pill active" data-filter="device" data-value="mobile">Mobile</button>
+      <button class="pill active" data-filter="device" data-value="desktop">Desktop</button>
+      <button class="pill active" data-filter="device" data-value="tablet">Tablet</button>
+    </div>
   </div>
-  <div class="filter-group">
-    <span class="filter-label">Device</span>
-    <span class="pill active" data-filter="device" data-value="all" onclick="toggleFilter(this)">All</span>
-    <span class="pill active" data-filter="device" data-value="mobile" onclick="toggleFilter(this)">Mobile</span>
-    <span class="pill active" data-filter="device" data-value="desktop" onclick="toggleFilter(this)">Desktop</span>
-    <span class="pill active" data-filter="device" data-value="tablet" onclick="toggleFilter(this)">Tablet</span>
-  </div>
-</div>
 
-<div class="metrics-row" id="metricsRow"></div>
-<div class="pos-grid" id="posGrid"></div>
-<div class="chart-section"><h2>Funnel by POS</h2><canvas id="funnelChart"></canvas></div>
-<div class="chart-section"><h2>CTR & Close Rate Comparison</h2><canvas id="rateChart"></canvas></div>
-<div class="takeaways" id="takeaways"><h2>Key Takeaways</h2><ul id="takeawaysList"></ul></div>
-<div class="note">Data source: GA4 Data API · Event <code>display_back_to_cart</code> for displays, <code>custom_click</code> with target containing <code>backtocart</code> for CTA/close interactions. Filtered by <code>customEvent:active_ab_test_variations</code> CONTAINS <code>d829g1qj3sg000a8dg1g</code>. Metrics are user-based (totalUsers).</div>
-<footer>
-  Generated: 2026-05-18 09:15 CET · Properties: FR 280303690 · ES 302266263 · BE 302251346 · NL 302274658 · IT 302218985
-</footer>
+  <!-- METRIC CARDS -->
+  <div class="metrics-row" id="metricsRow"></div>
+
+  <!-- POS CARDS -->
+  <div class="pos-grid" id="posGrid"></div>
+
+  <!-- CHARTS -->
+  <div class="chart-section">
+    <h3>Funnel by POS — Users</h3>
+    <div class="chart-wrap"><canvas id="funnelChart"></canvas></div>
+  </div>
+  <div class="chart-section">
+    <h3>CTR & Close Rate by POS</h3>
+    <div class="chart-wrap"><canvas id="rateChart"></canvas></div>
+  </div>
+
+  <!-- TAKEAWAYS -->
+  <div class="takeaways" id="takeaways"><h3>Key Takeaways</h3><ul id="takeawayList"></ul></div>
+
+  <!-- NOTES -->
+  <div class="notes">
+    <strong>Methodology:</strong> Data sourced from GA4 Data API. "Display" = <code>display_back_to_cart</code> events filtered by variant ID. "CTA Click" = <code>custom_click</code> with target containing <code>backtocart_cta</code>. "Close" = <code>custom_click</code> with target containing <code>backtocart_close</code>. All metrics are user-level (unique users). CTR = CTA users / Display users × 100. Close Rate = Close users / Display users × 100.
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Generated on 2026-05-19 09:15 CEST · GA4 Properties: FR 280303690 · ES 302266263 · BE 302251346 · NL 302274658 · IT 302218985
+  </div>
 </div>
 
 <script>
+// ─── DATA ───
 var DATA = {
   FR: {
-    name: 'weekendesk.fr', color: '#6c5ce7', propId: '280303690',
-    display: { mobile: {ev:1367, usr:543}, desktop: {ev:616, usr:216}, tablet: {ev:54, usr:21} },
-    cta:     { mobile: {ev:252, usr:144}, desktop: {ev:17, usr:16}, tablet: {ev:8, usr:2} },
-    close:   { mobile: {ev:0, usr:0},     desktop: {ev:38, usr:32}, tablet: {ev:7, usr:4} }
+    name: 'weekendesk.fr', color: '#7F77DD',
+    display: { mobile: {ev:1696, usr:684}, desktop: {ev:817, usr:285}, tablet: {ev:62, usr:25} },
+    cta:     { mobile: {ev:295, usr:166}, desktop: {ev:26, usr:23}, tablet: {ev:8, usr:2} },
+    close:   { mobile: {ev:0, usr:0},     desktop: {ev:46, usr:37}, tablet: {ev:8, usr:5} }
   },
   ES: {
-    name: 'weekendesk.es', color: '#e17055', propId: '302266263',
-    display: { mobile: {ev:129, usr:73}, desktop: {ev:74, usr:32}, tablet: {ev:5, usr:4} },
-    cta:     { mobile: {ev:19, usr:10}, desktop: {ev:6, usr:3}, tablet: {ev:0, usr:0} },
-    close:   { mobile: {ev:0, usr:0},   desktop: {ev:3, usr:2}, tablet: {ev:0, usr:0} }
+    name: 'weekendesk.es', color: '#E8594F',
+    display: { mobile: {ev:168, usr:94}, desktop: {ev:102, usr:39}, tablet: {ev:6, usr:5} },
+    cta:     { mobile: {ev:26, usr:15},  desktop: {ev:6, usr:3},   tablet: {ev:0, usr:0} },
+    close:   { mobile: {ev:0, usr:0},    desktop: {ev:7, usr:4},   tablet: {ev:0, usr:0} }
   },
   BE: {
-    name: 'weekendesk.be', color: '#00b894', propId: '302251346',
-    display: { mobile: {ev:119, usr:44}, desktop: {ev:46, usr:22}, tablet: {ev:0, usr:0} },
-    cta:     { mobile: {ev:16, usr:12}, desktop: {ev:0, usr:0}, tablet: {ev:0, usr:0} },
-    close:   { mobile: {ev:0, usr:0},   desktop: {ev:2, usr:2}, tablet: {ev:0, usr:0} }
+    name: 'weekendesk.be', color: '#F5A623',
+    display: { mobile: {ev:158, usr:66}, desktop: {ev:87, usr:34}, tablet: {ev:0, usr:0} },
+    cta:     { mobile: {ev:20, usr:16},  desktop: {ev:0, usr:0},   tablet: {ev:0, usr:0} },
+    close:   { mobile: {ev:0, usr:0},    desktop: {ev:4, usr:4},   tablet: {ev:0, usr:0} }
   },
   NL: {
-    name: 'weekendesk.nl', color: '#fdcb6e', propId: '302274658',
-    display: { mobile: {ev:8, usr:5}, desktop: {ev:8, usr:5}, tablet: {ev:0, usr:0} },
-    cta:     { mobile: {ev:3, usr:2}, desktop: {ev:0, usr:0}, tablet: {ev:0, usr:0} },
-    close:   { mobile: {ev:0, usr:0}, desktop: {ev:0, usr:0}, tablet: {ev:0, usr:0} }
+    name: 'weekendesk.nl', color: '#FF6B35',
+    display: { mobile: {ev:10, usr:7},  desktop: {ev:11, usr:5}, tablet: {ev:0, usr:0} },
+    cta:     { mobile: {ev:5, usr:4},   desktop: {ev:0, usr:0},  tablet: {ev:0, usr:0} },
+    close:   { mobile: {ev:0, usr:0},   desktop: {ev:0, usr:0},  tablet: {ev:0, usr:0} }
   },
   IT: {
-    name: 'weekendesk.it', color: '#0984e3', propId: '302218985',
-    display: { mobile: {ev:8, usr:6}, desktop: {ev:23, usr:7}, tablet: {ev:1, usr:1} },
-    cta:     { mobile: {ev:0, usr:0}, desktop: {ev:0, usr:0}, tablet: {ev:0, usr:0} },
-    close:   { mobile: {ev:0, usr:0}, desktop: {ev:0, usr:0}, tablet: {ev:0, usr:0} }
+    name: 'weekendesk.it', color: '#4ECDC4',
+    display: { mobile: {ev:12, usr:7},  desktop: {ev:26, usr:10}, tablet: {ev:1, usr:1} },
+    cta:     { mobile: {ev:1, usr:1},   desktop: {ev:0, usr:0},   tablet: {ev:0, usr:0} },
+    close:   { mobile: {ev:0, usr:0},   desktop: {ev:0, usr:0},   tablet: {ev:0, usr:0} }
   }
 };
 
 var POS_KEYS = ['FR','ES','BE','NL','IT'];
-var DEVICES = ['mobile','desktop','tablet'];
+var DEVICE_KEYS = ['mobile','desktop','tablet'];
+
 var selectedPOS = new Set(POS_KEYS);
-var selectedDevices = new Set(DEVICES);
+var selectedDevices = new Set(DEVICE_KEYS);
+
+// ─── FILTER LOGIC ───
+document.querySelectorAll('.pill[data-filter]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var filter = this.dataset.filter;
+    var value = this.dataset.value;
+    if (filter === 'pos') {
+      if (value === 'all') {
+        var allActive = selectedPOS.size === POS_KEYS.length;
+        if (allActive) { selectedPOS.clear(); } else { POS_KEYS.forEach(function(p){ selectedPOS.add(p); }); }
+      } else {
+        if (selectedPOS.has(value)) selectedPOS.delete(value); else selectedPOS.add(value);
+      }
+    } else {
+      if (value === 'all') {
+        var allActive = selectedDevices.size === DEVICE_KEYS.length;
+        if (allActive) { selectedDevices.clear(); } else { DEVICE_KEYS.forEach(function(d){ selectedDevices.add(d); }); }
+      } else {
+        if (selectedDevices.has(value)) selectedDevices.delete(value); else selectedDevices.add(value);
+      }
+    }
+    syncPills();
+    render();
+  });
+});
+
+function syncPills(){
+  document.querySelectorAll('.pill[data-filter="pos"]').forEach(function(b){
+    var v = b.dataset.value;
+    if (v === 'all') b.classList.toggle('active', selectedPOS.size === POS_KEYS.length);
+    else b.classList.toggle('active', selectedPOS.has(v));
+  });
+  document.querySelectorAll('.pill[data-filter="device"]').forEach(function(b){
+    var v = b.dataset.value;
+    if (v === 'all') b.classList.toggle('active', selectedDevices.size === DEVICE_KEYS.length);
+    else b.classList.toggle('active', selectedDevices.has(v));
+  });
+}
+
+// ─── AGGREGATE HELPERS ───
+function sumField(posKey, metric) {
+  var total = {ev:0, usr:0};
+  selectedDevices.forEach(function(d){
+    var o = DATA[posKey][metric][d];
+    if(o){ total.ev += o.ev; total.usr += o.usr; }
+  });
+  return total;
+}
+
+function globalSum(metric){
+  var total = {ev:0, usr:0};
+  selectedPOS.forEach(function(p){
+    var s = sumField(p, metric);
+    total.ev += s.ev; total.usr += s.usr;
+  });
+  return total;
+}
+
+function pct(num, den){ return den > 0 ? (num/den*100) : 0; }
+function fmt(n){ return n.toFixed(1); }
+
+// ─── CHARTS ───
 var funnelChart, rateChart;
-
-function toggleFilter(el) {
-  var type = el.dataset.filter;
-  var val = el.dataset.value;
-  var set = type === 'pos' ? selectedPOS : selectedDevices;
-  var allVals = type === 'pos' ? POS_KEYS : DEVICES;
-  var pills = document.querySelectorAll('.pill[data-filter="'+type+'"]');
-
-  if (val === 'all') {
-    var allActive = el.classList.contains('active');
-    if (allActive) { set.clear(); pills.forEach(function(p){p.classList.remove('active')}); }
-    else { allVals.forEach(function(v){set.add(v)}); pills.forEach(function(p){p.classList.add('active')}); }
-  } else {
-    if (set.has(val)) { set.delete(val); el.classList.remove('active'); }
-    else { set.add(val); el.classList.add('active'); }
-    var allPill = document.querySelector('.pill[data-filter="'+type+'"][data-value="all"]');
-    if (set.size === allVals.length) allPill.classList.add('active');
-    else allPill.classList.remove('active');
-  }
-  renderAll();
-}
-
-function sumField(posKey, field, devices) {
-  var d = DATA[posKey][field];
-  var ev = 0, usr = 0;
-  devices.forEach(function(dev) { if(d[dev]) { ev += d[dev].ev; usr += d[dev].usr; } });
-  return {ev: ev, usr: usr};
-}
-
-function getFiltered() {
-  var devs = Array.from(selectedDevices);
-  var results = {};
-  var totDisplay = 0, totCta = 0, totClose = 0;
-  selectedPOS.forEach(function(pos) {
-    var disp = sumField(pos, 'display', devs);
-    var cta = sumField(pos, 'cta', devs);
-    var cls = sumField(pos, 'close', devs);
-    var ctr = disp.usr > 0 ? (cta.usr / disp.usr * 100) : 0;
-    var closeRate = disp.usr > 0 ? (cls.usr / disp.usr * 100) : 0;
-    results[pos] = { display: disp, cta: cta, close: cls, ctr: Math.round(ctr*10)/10, closeRate: Math.round(closeRate*10)/10 };
-    totDisplay += disp.usr; totCta += cta.usr; totClose += cls.usr;
-  });
-  var globalCTR = totDisplay > 0 ? Math.round(totCta / totDisplay * 1000)/10 : 0;
-  var globalClose = totDisplay > 0 ? Math.round(totClose / totDisplay * 1000)/10 : 0;
-  return { pos: results, totDisplay: totDisplay, totCta: totCta, totClose: totClose, globalCTR: globalCTR, globalClose: globalClose };
-}
-
-function renderMetrics(f) {
-  var html = '';
-  html += '<div class="metric-card"><div class="value">'+f.totDisplay+'</div><div class="label">Display Users</div></div>';
-  html += '<div class="metric-card"><div class="value">'+f.totCta+'</div><div class="label">CTA Click Users</div></div>';
-  html += '<div class="metric-card"><div class="value">'+f.globalCTR+'%</div><div class="label">Global CTR</div></div>';
-  html += '<div class="metric-card"><div class="value">'+f.globalClose+'%</div><div class="label">Global Close Rate</div></div>';
-  document.getElementById('metricsRow').innerHTML = html;
-}
-
-function renderPOSCards(f) {
-  var html = '';
-  var keys = POS_KEYS.filter(function(k){return selectedPOS.has(k)});
-  keys.forEach(function(k) {
-    var p = f.pos[k];
-    var low = p.display.usr < 5;
-    html += '<div class="pos-card'+(low?' low-volume':'')+'" style="border-left-color:'+DATA[k].color+'">';
-    html += '<h3>'+DATA[k].name+' ('+k+')'+(low?' <span style="font-size:.7rem;color:#e17055">low volume</span>':'')+'</h3>';
-    html += '<div class="stat-row"><span class="stat-label">Display events</span><span class="stat-value">'+p.display.ev+'</span></div>';
-    html += '<div class="stat-row"><span class="stat-label">Display users</span><span class="stat-value">'+p.display.usr+'</span></div>';
-    html += '<div class="stat-row"><span class="stat-label">CTA click users</span><span class="stat-value">'+p.cta.usr+'</span></div>';
-    html += '<div class="stat-row"><span class="stat-label">Close users</span><span class="stat-value">'+p.close.usr+'</span></div>';
-    html += '<div class="stat-row"><span class="stat-label">CTR CTA</span><span class="stat-value" style="color:#6c5ce7">'+p.ctr+'%</span></div>';
-    html += '<div class="stat-row"><span class="stat-label">Close rate</span><span class="stat-value" style="color:#e17055">'+p.closeRate+'%</span></div>';
-    html += '</div>';
-  });
-  document.getElementById('posGrid').innerHTML = html;
-}
-
 var dataLabelPlugin = {
-  id: 'dataLabels',
-  afterDatasetsDraw: function(chart) {
+  id: 'datalabels-inline',
+  afterDatasetsDraw: function(chart){
     var ctx = chart.ctx;
-    chart.data.datasets.forEach(function(ds, i) {
+    chart.data.datasets.forEach(function(ds, i){
       var meta = chart.getDatasetMeta(i);
-      meta.data.forEach(function(bar, idx) {
+      meta.data.forEach(function(bar, idx){
         var val = ds.data[idx];
-        if (val === 0 || val === null) return;
+        if (val == null || val === 0) return;
         ctx.save();
-        ctx.fillStyle = '#2d3436';
+        ctx.fillStyle = '#374151';
         ctx.font = 'bold 11px -apple-system, sans-serif';
-        ctx.textAlign = chart.config.options.indexAxis === 'y' ? 'left' : 'center';
-        if (chart.config.options.indexAxis === 'y') {
-          ctx.fillText(val, bar.x + 6, bar.y + 4);
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        var x = bar.x + 6;
+        var y = bar.y;
+        if (typeof val === 'number' && val % 1 !== 0) {
+          ctx.fillText(val.toFixed(1) + '%', x, y);
         } else {
-          var label = typeof val === 'number' && ds.label && ds.label.indexOf('Rate') >= 0 ? val + '%' : val;
-          if (typeof val === 'number' && !isNaN(val) && String(val).indexOf('.') >= 0) label = val + '%';
-          ctx.fillText(label, bar.x, bar.y - 6);
+          ctx.fillText(val.toLocaleString(), x, y);
         }
         ctx.restore();
       });
@@ -218,135 +240,203 @@ var dataLabelPlugin = {
   }
 };
 
-function renderCharts(f) {
-  var keys = POS_KEYS.filter(function(k){return selectedPOS.has(k)});
-  var labels = keys.map(function(k){return k});
-  var displayData = keys.map(function(k){return f.pos[k].display.usr});
-  var ctaData = keys.map(function(k){return f.pos[k].cta.usr});
-  var closeData = keys.map(function(k){return f.pos[k].close.usr});
-  var colors = keys.map(function(k){return DATA[k].color});
+function buildCharts(){
+  var activePOS = POS_KEYS.filter(function(p){ return selectedPOS.has(p); });
+  var labels = activePOS.map(function(p){ return p; });
+  var colors = activePOS.map(function(p){ return DATA[p].color; });
 
-  if (funnelChart) funnelChart.destroy();
+  // Funnel
+  var dispData = activePOS.map(function(p){ return sumField(p,'display').usr; });
+  var ctaData = activePOS.map(function(p){ return sumField(p,'cta').usr; });
+  var closeData = activePOS.map(function(p){ return sumField(p,'close').usr; });
+
+  if(funnelChart) funnelChart.destroy();
   funnelChart = new Chart(document.getElementById('funnelChart'), {
     type: 'bar',
     data: {
       labels: labels,
       datasets: [
-        {label: 'Display Users', data: displayData, backgroundColor: 'rgba(108,92,231,0.7)'},
-        {label: 'CTA Click Users', data: ctaData, backgroundColor: 'rgba(0,184,148,0.7)'},
-        {label: 'Close Users', data: closeData, backgroundColor: 'rgba(225,112,85,0.7)'}
+        { label: 'Display Users', data: dispData, backgroundColor: colors.map(function(c){ return c+'CC'; }), borderRadius: 4 },
+        { label: 'CTA Click Users', data: ctaData, backgroundColor: colors.map(function(c){ return c+'88'; }), borderRadius: 4 },
+        { label: 'Close Users', data: closeData, backgroundColor: colors.map(function(c){ return c+'44'; }), borderRadius: 4 }
       ]
     },
     options: {
       indexAxis: 'y',
-      responsive: true,
-      plugins: {legend:{position:'top'}},
-      scales: {x:{beginAtZero:true}}
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+      scales: { x: { beginAtZero: true, grid: { color: '#f0f0f0' } }, y: { grid: { display: false } } }
     },
     plugins: [dataLabelPlugin]
   });
 
-  var ctrData = keys.map(function(k){return f.pos[k].ctr});
-  var closeRateData = keys.map(function(k){return f.pos[k].closeRate});
+  // Rate chart
+  var ctrData = activePOS.map(function(p){
+    var d = sumField(p,'display').usr;
+    var c = sumField(p,'cta').usr;
+    return d > 0 ? +(c/d*100).toFixed(1) : 0;
+  });
+  var closeRateData = activePOS.map(function(p){
+    var d = sumField(p,'display').usr;
+    var c = sumField(p,'close').usr;
+    return d > 0 ? +(c/d*100).toFixed(1) : 0;
+  });
 
-  if (rateChart) rateChart.destroy();
+  if(rateChart) rateChart.destroy();
   rateChart = new Chart(document.getElementById('rateChart'), {
     type: 'bar',
     data: {
       labels: labels,
       datasets: [
-        {label: 'CTR CTA (%)', data: ctrData, backgroundColor: colors.map(function(c){return c+'cc'})},
-        {label: 'Close Rate (%)', data: closeRateData, backgroundColor: colors.map(function(c){return c+'66'})}
+        { label: 'CTR CTA (%)', data: ctrData, backgroundColor: '#6366f1', borderRadius: 4 },
+        { label: 'Close Rate (%)', data: closeRateData, backgroundColor: '#f59e0b', borderRadius: 4 }
       ]
     },
     options: {
-      responsive: true,
-      plugins: {legend:{position:'top'}},
-      scales: {y:{beginAtZero:true, ticks:{callback:function(v){return v+'%'}}}}
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+      scales: { x: { beginAtZero: true, max: Math.max(40, Math.max.apply(null, ctrData.concat(closeRateData)) + 5), grid: { color: '#f0f0f0' }, ticks: { callback: function(v){ return v+'%'; } } }, y: { grid: { display: false } } }
     },
     plugins: [dataLabelPlugin]
   });
 }
 
-function renderTakeaways(f) {
-  var keys = POS_KEYS.filter(function(k){return selectedPOS.has(k)});
+// ─── RENDER ───
+function render(){
+  // Metric cards
+  var gDisp = globalSum('display');
+  var gCta = globalSum('cta');
+  var gClose = globalSum('close');
+  var gCTR = pct(gCta.usr, gDisp.usr);
+  var gCloseR = pct(gClose.usr, gDisp.usr);
+
+  document.getElementById('metricsRow').innerHTML =
+    mc('Display Users', gDisp.usr.toLocaleString()) +
+    mc('CTA Click Users', gCta.usr.toLocaleString()) +
+    mc('Close Users', gClose.usr.toLocaleString()) +
+    mc('Global CTR', fmt(gCTR) + '%') +
+    mc('Global Close Rate', fmt(gCloseR) + '%');
+
+  // POS cards
+  var activePOS = POS_KEYS.filter(function(p){ return selectedPOS.has(p); });
+  var html = '';
+  activePOS.forEach(function(p){
+    var d = sumField(p,'display');
+    var c = sumField(p,'cta');
+    var cl = sumField(p,'close');
+    var ctr = pct(c.usr, d.usr);
+    var cr = pct(cl.usr, d.usr);
+    var low = d.usr < 5;
+    html += '<div class="pos-card' + (low ? ' low-volume' : '') + '" style="border-left-color:'+DATA[p].color+'">' +
+      '<div class="pos-name" style="color:'+DATA[p].color+'">'+p+' — '+DATA[p].name+'</div>' +
+      sr('Display events', d.ev.toLocaleString()) +
+      sr('Display users', d.usr.toLocaleString()) +
+      sr('CTA clicks (ev)', c.ev.toLocaleString()) +
+      sr('CTA users', c.usr.toLocaleString()) +
+      sr('Close events', cl.ev.toLocaleString()) +
+      sr('Close users', cl.usr.toLocaleString()) +
+      sr('CTR CTA', fmt(ctr)+'%') +
+      sr('Close rate', fmt(cr)+'%') +
+      (low ? '<div style="font-size:0.72rem;color:#d97706;margin-top:6px;">⚠ Low volume</div>' : '') +
+      '</div>';
+  });
+  document.getElementById('posGrid').innerHTML = html;
+
+  // Charts
+  buildCharts();
+
+  // Takeaways
+  generateTakeaways(activePOS);
+}
+
+function mc(label, value){
+  return '<div class="metric-card"><div class="value">'+value+'</div><div class="label">'+label+'</div></div>';
+}
+function sr(k, v){
+  return '<div class="stat"><span class="k">'+k+'</span><span>'+v+'</span></div>';
+}
+
+function generateTakeaways(activePOS){
   var items = [];
-
-  if (keys.length === 0) { document.getElementById('takeawaysList').innerHTML = '<li>No POS selected.</li>'; return; }
-
-  // Best/worst CTR
-  var sorted = keys.slice().sort(function(a,b){return f.pos[b].ctr - f.pos[a].ctr});
-  var best = sorted[0], worst = sorted[sorted.length - 1];
-  if (keys.length > 1) {
-    items.push('<strong>'+best+'</strong> has the highest CTA click-through rate at <strong>'+f.pos[best].ctr+'%</strong>, while <strong>'+worst+'</strong> has the lowest at <strong>'+f.pos[worst].ctr+'%</strong>.');
+  if (activePOS.length === 0) {
+    items.push('No POS selected. Select at least one to see insights.');
+    document.getElementById('takeawayList').innerHTML = items.map(function(i){ return '<li>'+i+'</li>'; }).join('');
+    return;
   }
 
-  // IT check
+  // Best / worst CTR
+  var ctrMap = {};
+  activePOS.forEach(function(p){
+    var d = sumField(p,'display').usr;
+    var c = sumField(p,'cta').usr;
+    ctrMap[p] = d > 0 ? pct(c,d) : 0;
+  });
+  var sorted = activePOS.slice().sort(function(a,b){ return ctrMap[b]-ctrMap[a]; });
+  var best = sorted[0]; var worst = sorted[sorted.length-1];
+  if (sorted.length > 1) {
+    items.push('<strong>'+best+'</strong> leads with the highest CTA click-through rate at <strong>'+fmt(ctrMap[best])+'%</strong>, while <strong>'+worst+'</strong> has the lowest at <strong>'+fmt(ctrMap[worst])+'%</strong>.');
+  } else {
+    items.push('<strong>'+best+'</strong> has a CTA click-through rate of <strong>'+fmt(ctrMap[best])+'%</strong>.');
+  }
+
+  // IT clicks status
   if (selectedPOS.has('IT')) {
-    if (f.pos['IT'].cta.usr === 0) {
-      items.push('<strong>IT</strong> still shows <strong>zero CTA clicks</strong>. The Back 2 Cart modal is displaying ('+f.pos['IT'].display.usr+' users) but no one is clicking through — verify CTA tracking or UX on weekendesk.it.');
+    var itCta = sumField('IT','cta').usr;
+    if (itCta > 0) {
+      items.push('IT has started registering CTA clicks (<strong>'+itCta+' user'+(itCta!==1?'s':'')+'</strong>), though volume remains very low.');
     } else {
-      items.push('<strong>IT</strong> has started registering CTA clicks ('+f.pos['IT'].cta.usr+' users) — tracking appears to be working now.');
+      items.push('IT has <strong>not yet registered any CTA clicks</strong> in the current filter selection.');
     }
   }
 
   // Volume assessment
-  var lowVol = keys.filter(function(k){return f.pos[k].display.usr < 50});
-  var highVol = keys.filter(function(k){return f.pos[k].display.usr >= 200});
-  if (lowVol.length > 0) {
-    items.push('Low volume warning: <strong>'+lowVol.join(', ')+'</strong> have fewer than 50 display users — results are not statistically reliable yet.');
+  var gDisp = globalSum('display').usr;
+  if (gDisp < 100) {
+    items.push('Total display volume is only <strong>'+gDisp+' users</strong> — far too low for statistical significance. Continue collecting data.');
+  } else if (gDisp < 500) {
+    items.push('Total display volume stands at <strong>'+gDisp+' users</strong>. This is growing but still insufficient for reliable statistical conclusions. More days of data are needed.');
+  } else {
+    items.push('Total display volume has reached <strong>'+gDisp+' users</strong>. FR contributes the largest share, which helps but individual POS significance varies.');
   }
-  if (highVol.length > 0) {
-    items.push('<strong>'+highVol.join(', ')+'</strong> '+(highVol.length===1?'has':'have')+' solid sample sizes (200+ display users) for meaningful analysis.');
-  }
-
-  // Global CTR
-  items.push('Global CTR across selected POS is <strong>'+f.globalCTR+'%</strong> with <strong>'+f.totDisplay+'</strong> total display users.');
 
   // Mobile vs desktop
-  if (selectedDevices.has('mobile') && selectedDevices.has('desktop') && selectedDevices.size >= 2) {
-    var mobDisp = 0, mobCta = 0, deskDisp = 0, deskCta = 0;
-    keys.forEach(function(k) {
-      mobDisp += DATA[k].display.mobile.usr; mobCta += DATA[k].cta.mobile.usr;
-      deskDisp += DATA[k].display.desktop.usr; deskCta += DATA[k].cta.desktop.usr;
-    });
-    var mobCTR = mobDisp > 0 ? Math.round(mobCta/mobDisp*1000)/10 : 0;
-    var deskCTR = deskDisp > 0 ? Math.round(deskCta/deskDisp*1000)/10 : 0;
+  var mobDisp = 0, deskDisp = 0, mobCta = 0, deskCta = 0;
+  activePOS.forEach(function(p){
+    if (selectedDevices.has('mobile')) { mobDisp += DATA[p].display.mobile.usr; mobCta += DATA[p].cta.mobile.usr; }
+    if (selectedDevices.has('desktop')) { deskDisp += DATA[p].display.desktop.usr; deskCta += DATA[p].cta.desktop.usr; }
+  });
+  if (selectedDevices.has('mobile') && selectedDevices.has('desktop') && mobDisp > 0 && deskDisp > 0) {
+    var mobCTR = pct(mobCta, mobDisp);
+    var deskCTR = pct(deskCta, deskDisp);
     if (mobCTR > deskCTR) {
-      items.push('Mobile CTR (<strong>'+mobCTR+'%</strong>) outperforms desktop (<strong>'+deskCTR+'%</strong>) — the modal seems more effective on mobile devices.');
+      items.push('Mobile CTR (<strong>'+fmt(mobCTR)+'%</strong>) outperforms desktop (<strong>'+fmt(deskCTR)+'%</strong>). Mobile users show higher engagement with the Back 2 Cart prompt.');
     } else if (deskCTR > mobCTR) {
-      items.push('Desktop CTR (<strong>'+deskCTR+'%</strong>) outperforms mobile (<strong>'+mobCTR+'%</strong>) — users on desktop engage more with the CTA.');
+      items.push('Desktop CTR (<strong>'+fmt(deskCTR)+'%</strong>) outperforms mobile (<strong>'+fmt(mobCTR)+'%</strong>).');
     } else {
-      items.push('Mobile and desktop CTR are equivalent at <strong>'+mobCTR+'%</strong>.');
+      items.push('Mobile and desktop CTR are identical at <strong>'+fmt(mobCTR)+'%</strong>.');
     }
   }
 
-  // Close rate observation
-  if (f.globalClose > 0) {
-    items.push('Global close rate is <strong>'+f.globalClose+'%</strong> — these users explicitly dismissed the modal.');
+  // Close rate anomaly — close on mobile missing
+  var totalClose = globalSum('close').usr;
+  var totalCloseDesktop = 0;
+  activePOS.forEach(function(p){ if(selectedDevices.has('desktop')) totalCloseDesktop += DATA[p].close.desktop.usr; });
+  if (totalClose > 0 && totalCloseDesktop === totalClose && selectedDevices.has('mobile')) {
+    items.push('All close events come from <strong>desktop only</strong> — no mobile close events are being tracked. This may indicate a tracking gap on mobile or a different UX flow.');
   }
 
-  // FR mobile close missing
-  if (selectedPOS.has('FR') && selectedDevices.has('mobile')) {
-    if (DATA.FR.close.mobile.usr === 0 && DATA.FR.display.mobile.usr > 100) {
-      items.push('Note: FR shows <strong>0 mobile close events</strong> despite 543 mobile display users — the close button may not be tracked on mobile, or users are navigating away instead of closing.');
-    }
+  // Low volume POS
+  var lowVol = activePOS.filter(function(p){ return sumField(p,'display').usr < 5; });
+  if (lowVol.length > 0) {
+    items.push(lowVol.map(function(p){return '<strong>'+p+'</strong>';}).join(', ') + ' ha'+(lowVol.length>1?'ve':'s')+' very low volume (< 5 display users in current filter) — shown with dashed borders.');
   }
 
-  var html = '';
-  items.forEach(function(item) { html += '<li>'+item+'</li>'; });
-  document.getElementById('takeawaysList').innerHTML = html;
+  document.getElementById('takeawayList').innerHTML = items.map(function(i){ return '<li>'+i+'</li>'; }).join('');
 }
 
-function renderAll() {
-  var f = getFiltered();
-  renderMetrics(f);
-  renderPOSCards(f);
-  renderCharts(f);
-  renderTakeaways(f);
-}
-
-renderAll();
+// Initial render
+render();
 </script>
 </body>
 </html>
